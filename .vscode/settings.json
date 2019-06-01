@@ -1,0 +1,13 @@
+{
+    "editor.formatOnSave": true,
+    "[typescript]": {
+        "editor.formatOnSave": false
+    },
+    // "files.associations": {
+    //     "*.svelte": "html"
+    // },
+    "eslint.validate": [{ "language": "typescript", "autoFix": true } /*, { "language": "html", "autoFix": true }*/],
+    "eslint.autoFixOnSave": true,
+    "eslint.alwaysShowStatus": true,
+    "prettier.disableLanguages": ["ts"]
+}
