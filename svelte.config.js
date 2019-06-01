@@ -6,10 +6,10 @@ const sass = require('node-sass')
 module.exports = {
     preprocess: {
         style: ({ content, attributes, filename }) => {
-            if (attributes.type !== 'text/sass' && attributes.lang !== 'sass') return
+            if (attributes.type !== 'text/scss' && attributes.lang !== 'scss') return
 
-            // Needed because svelte indents the style content
-            content = content.replace(/^    /gm, '')
+            // // Needed because svelte indents the style content
+            // content = content.replace(/^    /gm, '')
 
             return new Promise((resolve, reject) => {
                 sass.render(
@@ -17,8 +17,8 @@ module.exports = {
                         data: content,
                         includePaths: ['src', 'node_modules'],
                         sourceMap: true,
-                        indentedSyntax: true,
-                        indentWidth: 4,
+                        // indentedSyntax: true,
+                        // indentWidth: 4,
                         outFile: filename + '.css'
                     },
                     (err, result) => {
