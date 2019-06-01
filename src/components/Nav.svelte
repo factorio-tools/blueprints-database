@@ -1,18 +1,12 @@
 <script lang="typescript">
-    import test from '../test'
-    // console.log(new test().test)
-
     export let segment
 </script>
 
 <style lang="scss">
-    @import 'test';
-
     nav {
         border-bottom: 1px solid rgba(255, 62, 0, 0.1);
         font-weight: 300;
         padding: 0 1em;
-        margin-top: $testvar;
     }
 
     ul {
