@@ -4,3 +4,4 @@ node_modules
 /export/
 /build/
 /src/manifest/
+.env
