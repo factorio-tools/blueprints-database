@@ -1,4 +1,4 @@
-import { timestamp, files, shell, routes } from '@sapper/service-worker'
+import { timestamp, files, shell } from '@sapper/service-worker'
 
 const ASSETS = `cache${timestamp}`
 
@@ -6,6 +6,8 @@ const ASSETS = `cache${timestamp}`
 // `files` is an array of everything in the `static` directory
 const toCache = shell.concat(files)
 const cached = new Set(toCache)
+
+declare const self: ServiceWorkerGlobalScope
 
 self.addEventListener('install', event => {
     event.waitUntil(
@@ -52,7 +54,7 @@ self.addEventListener('fetch', event => {
 
     // always serve static files and bundler-generated assets from cache
     if (url.host === self.location.host && cached.has(url.pathname)) {
-        event.respondWith(caches.match(event.request))
+        event.respondWith(caches.match(event.request) as Promise<Response>)
         return
     }
 

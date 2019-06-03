@@ -2,7 +2,7 @@
     "include": ["src/**/*"],
     "exclude": ["node_modules/*"],
     "compilerOptions": {
-        "lib": ["es5", "es6", "dom", "dom.iterable", "es2016.array.include", "es2017.object"],
+        "lib": ["es5", "es6", "webworker", "dom", "dom.iterable", "es2016.array.include", "es2017.object"],
         "target": "es6",
         "module": "es6",
         "moduleResolution": "classic",
