@@ -1,5 +1,6 @@
 <img src="./.github/github_banner.png" width="100%">
 
+[![Build Status](https://travis-ci.org/factorio-tools/blueprints-database.svg?branch=master)](https://travis-ci.org/factorio-tools/blueprints-database)
 [![Website](https://img.shields.io/website-up-down-brightgreen-red/https/blueprints.factorio.tools.svg?style=flat-square)](https://blueprints.factorio.tools)
 [![GitHub issues by-label](https://img.shields.io/github/issues/factorio-tools/blueprints-database/bug.svg?style=flat-square)](https://github.com/factorio-tools/blueprints-database/issues?utf8=✓&q=is%3Aissue+is%3Aopen+label%3Abug)
 [![GitHub issues by-label](https://img.shields.io/github/issues/factorio-tools/blueprints-database/enhancement.svg?style=flat-square&color=blue)](https://github.com/factorio-tools/blueprints-database/issues?q=is%3Aissue+is%3Aopen+label%3Aenhancement)
