@@ -26,7 +26,7 @@ elif [ $TRAVIS_BRANCH == "staging" ] ; then
     # setup ssh agent, git config and remote
     eval "$(ssh-agent -s)"
     ssh-add ./deploy_key
-    git remote add deploy "$USER@$IP:/home/sapper/my-app"
+    git remote add deploy "$USER@$IP:/home/sapper/staging-blueprints-app"
     git config user.name "Travis CI"
     git config user.email "travis@factorio.tools"
 
