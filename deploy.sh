@@ -3,8 +3,6 @@
 # print outputs and exit on first failure
 set -xe
 
-echo .travis/SERVER_SSH_KEY >> $HOME/.ssh/known_hosts
-
 if [ $TRAVIS_BRANCH == "master" ] ; then
 
     # setup ssh agent, git config and remote
