@@ -77,6 +77,11 @@ export default {
                 'process.env.NODE_ENV': JSON.stringify(mode)
             }),
             commonjs(),
+            sucrase({
+                include: ['**/*.ts'],
+                exclude: ['node_modules/**'],
+                transforms: ['typescript']
+            }),
             !dev && terser()
         ]
     }
