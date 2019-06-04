@@ -1,0 +1,22 @@
+language: node_js
+node_js:
+- 8.16.0
+addons:
+  ssh_known_hosts: 142.93.10.61
+branches:
+  only:
+  - master
+  - staging
+before_install:
+- chmod 600 ./deploy_key
+
+install:
+- npm install
+script:
+  - npm run build
+deploy:
+  skip_cleanup: true
+  provider: script
+  script: ./deploy.sh
+  on:
+    all_branches: true
