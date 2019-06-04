@@ -8,15 +8,16 @@ branches:
   - master
   - staging
 before_install:
+- openssl aes-256-cbc -K $encrypted_78ba3e85acf3_key -iv $encrypted_78ba3e85acf3_iv
+  -in deploy_key.enc -out deploy_key -d
 - chmod 600 ./deploy_key
-
 install:
 - npm install
 script:
-  - npm run build
+- npm run build
 deploy:
   skip_cleanup: true
   provider: script
-  script: ./deploy.sh
+  script: "./deploy.sh"
   on:
     all_branches: true

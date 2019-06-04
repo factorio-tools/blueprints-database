@@ -5,3 +5,5 @@ node_modules
 /build/
 /src/manifest/
 .env
+deploy
+deploy_key
