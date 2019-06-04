@@ -1,22 +1,23 @@
 language: node_js
 node_js:
-- 8.16.0
+    - node
+cache: npm
 addons:
-  ssh_known_hosts: 142.93.10.61
+    ssh_known_hosts: 142.93.10.61
 branches:
-  only:
-  - master
-  - staging
+    only:
+        - master
+        - staging
 before_install:
-- openssl aes-256-cbc -K $encrypted_78ba3e85acf3_key -iv $encrypted_78ba3e85acf3_iv -in deploy_key.enc -out deploy_key -d
-- chmod 600 ./deploy_key
+    - openssl aes-256-cbc -K $encrypted_78ba3e85acf3_key -iv $encrypted_78ba3e85acf3_iv -in deploy_key.enc -out deploy_key -d
+    - chmod 600 ./deploy_key
 install:
-- npm install
+    - npm install
 script:
-- npm run build
+    - npm run build
 deploy:
-  skip_cleanup: true
-  provider: script
-  script: chmod +x ./deploy.sh && ./deploy.sh
-  on:
-    all_branches: true
+    skip_cleanup: true
+    provider: script
+    script: chmod +x ./deploy.sh && ./deploy.sh
+    on:
+        all_branches: true
