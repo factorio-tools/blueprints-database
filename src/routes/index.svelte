@@ -1,3 +1,24 @@
+<script lang="typescript">
+    import { getClient, query } from 'svelte-apollo'
+    import { gql } from 'apollo-boost'
+
+    const GET_POSTS = gql`
+        {
+            posts {
+                title
+                author {
+                    firstName
+                    lastName
+                }
+            }
+        }
+    `
+
+    const client = getClient()
+
+    const books = query(client, { query: GET_POSTS })
+</script>
+
 <style lang="scss">
     h1,
     figure,
@@ -48,3 +69,19 @@
 <p>
     <strong>Try editing this file (src/routes/index.svelte) to test live reloading.</strong>
 </p>
+
+<h3>GraphQL Test:</h3>
+{#await $books}
+    Loading...
+{:then result}
+    <ul>
+        {#each result.data.posts as post}
+            <li>
+                <b>{post.title}</b>
+                by {post.author.firstName} {post.author.lastName}
+            </li>
+        {/each}
+    </ul>
+{:catch error}
+    Error: {error}
+{/await}

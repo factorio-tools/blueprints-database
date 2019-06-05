@@ -2,6 +2,15 @@
     import Header from '../components/Layout/Header/Header.svelte'
     import Footer from '../components/Layout/Footer/Footer.svelte'
 
+    import ApolloClient from 'apollo-boost'
+    import { setClient } from 'svelte-apollo'
+    import isNode from 'detect-node'
+
+    // Needed because node-fetch needs an absolute URI
+    const uri = isNode ? `http://localhost:${process.env.PORT}/graphql` : '/graphql'
+    const client = new ApolloClient({ uri })
+    setClient(client)
+
     export let segment
 </script>
 

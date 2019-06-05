@@ -30,7 +30,7 @@ module.exports = {
 
         '@typescript-eslint/no-useless-constructor': 'warn',
         '@typescript-eslint/restrict-plus-operands': 'error',
-        '@typescript-eslint/interface-name-prefix': ['error', 'always'], // maybe turn off
+        '@typescript-eslint/interface-name-prefix': 'off',
         '@typescript-eslint/no-use-before-define': 'off',
         '@typescript-eslint/no-object-literal-type-assertion': ['error', { allowAsParameter: true }],
         '@typescript-eslint/explicit-member-accessibility': 'warn',

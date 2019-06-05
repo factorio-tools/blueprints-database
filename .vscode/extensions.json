@@ -3,6 +3,7 @@
         "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode",
         "eamodio.gitlens",
-        "jamesbirtles.svelte-vscode"
+        "jamesbirtles.svelte-vscode",
+        "apollographql.vscode-apollo"
     ]
 }
