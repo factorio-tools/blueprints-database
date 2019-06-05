@@ -1,0 +1,66 @@
+<script>
+    import Button from '../Button/Button.svelte'
+    export let segment
+</script>
+
+<style lang="scss">
+    header {
+        width: 100%;
+        max-width: 1614px;
+        padding: 0 19px;
+        margin: 0 auto;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .logo_container {
+        display: flex;
+        align-items: center;
+    }
+    img {
+        width: 100%;
+        max-width: 237px;
+        padding: 40px 45px 40px 0;
+        border-right: 1px solid rgba(255, 255, 255, 0.2);
+        box-sizing: content-box;
+    }
+    h1 {
+        text-decoration: none;
+        text-transform: uppercase;
+        font-weight: 300;
+        font-size: 38px;
+        margin: 0 40px;
+    }
+    nav > :global(a) {
+        margin-left: 15px;
+    }
+</style>
+
+<header>
+    <div class="logo_container">
+        <a href="/">
+            <img src="/factorio_tools_logo.svg" alt="Factorio Tools" />
+        </a>
+        <a href="/">
+            <h1>Blueprints Database</h1>
+        </a>
+    </div>
+    <nav>
+        <Button text="ADD BLUEPRINT" href="/about" icon="plus" color="yellow" />
+        <Button text="LarryCarryOW" href="/blog" icon="user-astronaut" />
+    </nav>
+</header>
+
+<!-- <nav>
+    <ul>
+        <li>
+            <a class={segment === undefined ? 'selected' : ''} href=".">home</a>
+        </li>
+        <li>
+            <a class={segment === 'about' ? 'selected' : ''} href="about">about</a>
+        </li>
+        <li>
+            <a rel="prefetch" class={segment === 'blog' ? 'selected' : ''} href="blog">blog</a>
+        </li>
+    </ul>
+</nav> -->

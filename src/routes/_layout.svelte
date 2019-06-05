@@ -1,22 +1,38 @@
 <script>
-    import Nav from '../components/Nav.svelte'
+    import Header from '../components/Layout/Header/Header.svelte'
+    import Footer from '../components/Layout/Footer/Footer.svelte'
 
     export let segment
 </script>
 
-<style>
-    main {
-        position: relative;
-        max-width: 56em;
-        background-color: white;
-        padding: 2em;
-        margin: 0 auto;
+<style lang="scss">
+    :global(*) {
         box-sizing: border-box;
+        color: #ffffff;
+        font-family: 'Roboto', sans-serif;
+    }
+    :global(body) {
+        background: url('/layout_bg.jpg') center top no-repeat #0e1721;
+    }
+    :global(h1, h2, h3, h4, h5, h6) {
+        font-family: 'Teko', sans-serif;
+    }
+    :global(a) {
+        text-decoration: none;
+        color: #ffffff;
+    }
+    main {
+        width: 100%;
+        max-width: 1614px;
+        padding: 0 19px;
+        margin: 0 auto;
     }
 </style>
 
-<Nav {segment} />
+<Header {segment} />
 
 <main>
     <slot />
 </main>
+
+<Footer />
