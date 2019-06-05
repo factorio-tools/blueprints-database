@@ -10,7 +10,7 @@
 
 <style lang="scss">
     a {
-        padding: 13px 18px 10px 18px;
+        padding: 10px 18px 10px 18px;
         font-size: 19px;
         font-weight: 400;
         line-height: 19px;
