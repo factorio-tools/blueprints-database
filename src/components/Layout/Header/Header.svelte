@@ -19,8 +19,8 @@
     }
     img {
         width: 100%;
-        max-width: 237px;
-        padding: 40px 45px 40px 0;
+        max-width: 157px;
+        padding: 30px 45px 30px 0;
         border-right: 1px solid rgba(255, 255, 255, 0.2);
         box-sizing: content-box;
     }
@@ -28,7 +28,7 @@
         text-decoration: none;
         text-transform: uppercase;
         font-weight: 300;
-        font-size: 38px;
+        font-size: 34px;
         margin: 0 40px;
     }
     nav > :global(a) {
