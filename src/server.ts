@@ -3,12 +3,8 @@ import express from 'express'
 import compression from 'compression'
 import * as sapper from '@sapper/server'
 // import orango from 'orango'
-import fetch from 'node-fetch'
 import { ApolloServer } from 'apollo-server-express'
 import { typeDefs, resolvers } from './graphql'
-
-// Needed so that SSR works with ApolloClient
-global.fetch = fetch
 
 const { PORT, NODE_ENV } = process.env
 const dev = NODE_ENV === 'development'
