@@ -1,13 +1,14 @@
 <script context="module">
     import { HOME_ALL } from '../data/queries.ts'
-    import { client } from '../data/client.ts'
+    // We can't use getClient() here. Instead use temp client to fetch cache data
+    import { client as client_temp } from '../data/client.ts'
 
     // Query everything needed for entire route into preload here.
     // Then future data can be queried against the cache
     // So each main page route will load all data this way
     export async function preload() {
         return {
-            cache: await client.query({
+            cache: await client_temp.query({
                 query: HOME_ALL
             })
         }
@@ -15,12 +16,14 @@
 </script>
 
 <script>
-    import { restore, query } from 'svelte-apollo'
+    import { restore, query, getClient } from 'svelte-apollo'
     import Posts from '../components/Posts/Posts.svelte'
     import { GET_FAVORITES } from '../data/queries.ts'
 
     export let cache
 
+    // Get actual client
+    const client = getClient()
     // Init data from cache
     restore(client, HOME_ALL, cache.data)
 
