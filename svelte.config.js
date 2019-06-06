@@ -1,5 +1,6 @@
 const sucrase = require('sucrase')
 const sass = require('node-sass')
+// const typescript = require('svelte-preprocess/src/transformers/typescript')
 // const stylus = require('stylus')
 
 // Needed for the svelte-vscode extension
@@ -48,6 +49,11 @@ module.exports = {
             //     })
             // })
         },
+        // script: ({ content, attributes, filename }) => {
+        //     if (attributes.lang !== 'typescript') return
+
+        //     return typescript({ content, filename, options: {} })
+        // }
         script: ({ content, attributes, filename }) => {
             if (attributes.lang !== 'typescript') return
 
