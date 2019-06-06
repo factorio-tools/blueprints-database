@@ -1,6 +1,6 @@
-import { Database as ArangoDatabase } from 'arangojs'
-
 declare module 'orango' {
+    import { Database as ArangoDatabase } from 'arangojs'
+
     interface Defaults {
         DATABASE: string
         URL: string
