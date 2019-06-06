@@ -1,46 +1,10 @@
-import ApolloClient from 'apollo-client'
-import { InMemoryCache } from 'apollo-cache-inmemory'
-import { WebSocketLink } from 'apollo-link-ws'
-import { split } from 'apollo-link'
-import { HttpLink } from 'apollo-link-http'
-import { getMainDefinition } from 'apollo-utilities'
-import isNode from 'detect-node'
-import nodeFetch from 'node-fetch'
+import ApolloClient from 'apollo-boost'
 
-const headers = { 'content-type': 'application/json' }
-const getHeaders = () => headers
-const uri = isNode ? `http://localhost:${process.env.PORT}/graphql` : '/graphql'
-const cache = new InMemoryCache()
+// Needed so that SSR works with ApolloClient
+const fetch = process.browser ? window.fetch : require('node-fetch')
+// Needed because node-fetch needs an absolute URI
+const uri = process.browser ? '/graphql' : `http://localhost:${process.env.PORT}/graphql`
 
-const wsLink = process.browser
-    ? new WebSocketLink({
-          uri,
-          options: {
-              reconnect: true,
-              lazy: true
-          },
-          connectionParams: () => ({ headers: getHeaders() })
-      })
-    : null
+const client = new ApolloClient({ uri, fetch })
 
-const httpLink = new HttpLink({
-    uri,
-    headers: getHeaders(),
-    fetch: nodeFetch
-})
-
-const link = process.browser
-    ? split(
-          ({ query }) => {
-              const { kind, operation } = getMainDefinition(query)
-              return kind === 'OperationDefinition' && operation === 'subscription'
-          },
-          wsLink,
-          httpLink
-      )
-    : httpLink
-
-export const client = new ApolloClient({
-    link,
-    cache
-})
+export { client }

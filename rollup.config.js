@@ -26,7 +26,7 @@ export default {
                 emitCss: true,
                 ...svelteConfig
             }),
-            resolve({ browser: true, extensions: ['.mjs', '.js', '.ts', '.json'] }),
+            resolve({ /*browser: true,*/ extensions: ['.mjs', '.js', '.ts', '.json'] }),
             commonjs(),
             sucrase({
                 include: ['**/*.ts'],

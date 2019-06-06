@@ -1,5 +1,4 @@
 <script>
-    import ApolloClient from 'apollo-client'
     import { setClient } from 'svelte-apollo'
 
     import { client } from '../data/client.ts'
