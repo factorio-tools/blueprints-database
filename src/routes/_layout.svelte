@@ -2,7 +2,7 @@
     import ApolloClient from 'apollo-client'
     import { setClient } from 'svelte-apollo'
 
-    import { client } from '../data/client.js'
+    import { client } from '../data/client.ts'
 
     import Header from '../components/Layout/Header/Header.svelte'
     import Footer from '../components/Layout/Footer/Footer.svelte'

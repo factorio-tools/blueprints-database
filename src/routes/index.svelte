@@ -1,6 +1,6 @@
 <script context="module">
     import { HOME_ALL } from '../data/queries.ts'
-    import { client } from '../data/client.js'
+    import { client } from '../data/client.ts'
 
     // Query everything needed for entire route into preload here.
     // Then future data can be queried against the cache
