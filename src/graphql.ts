@@ -14,6 +14,11 @@ const posts = [
     { id: 4, authorId: 3, title: 'Launchpad is Cool', votes: 7 }
 ]
 
+const favorites = [
+    { id: 1, title: 'Favorite 1' },
+    { id: 2, title: 'Favorite 2'},
+]
+
 const typeDefs: DocumentNode = gql`
     type Author {
         id: Int!
@@ -30,9 +35,15 @@ const typeDefs: DocumentNode = gql`
         votes: Int
     }
 
+    type Favorite {
+        id: Int!
+        title: String
+    }
+
     # the schema allows the following query:
     type Query {
         posts: [Post]
+        favorites: [Favorite]
         author(id: Int!): Author
     }
 
@@ -45,6 +56,7 @@ const typeDefs: DocumentNode = gql`
 const resolvers: IResolvers = {
     Query: {
         posts: () => posts,
+        favorites: () => favorites,
         author: (_, { id }) => authors.find(a => a.id === id)
     },
 

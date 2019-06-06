@@ -1,87 +1,55 @@
-<script lang="typescript">
-    import { getClient, query } from 'svelte-apollo'
-    import { gql } from 'apollo-boost'
+<script context="module">
+    import { HOME_ALL } from '../data/queries.ts'
+    import { client } from '../data/client.js'
 
-    const GET_POSTS = gql`
-        {
-            posts {
-                title
-                author {
-                    firstName
-                    lastName
-                }
-            }
+    // Query everything needed for entire route into preload here.
+    // Then future data can be queried against the cache
+    // So each main page route will load all data this way
+    export async function preload() {
+        return {
+            cache: await client.query({
+                query: HOME_ALL
+            })
         }
-    `
-
-    const client = getClient()
-
-    const books = query(client, { query: GET_POSTS })
+    }
 </script>
 
-<style lang="scss">
-    h1,
-    figure,
-    p {
-        text-align: center;
-        margin: 0 auto;
-    }
+<script>
+    import { restore, query } from 'svelte-apollo'
+    import Posts from '../components/Posts/Posts.svelte'
+    import { GET_FAVORITES } from '../data/queries.ts'
 
-    h1 {
-        font-size: 2.8em;
-        text-transform: uppercase;
-        font-weight: 700;
-        margin: 0 0 0.5em 0;
-    }
+    export let cache
 
-    figure {
-        margin: 0 0 1em 0;
-    }
+    // Init data from cache
+    restore(client, HOME_ALL, cache.data)
 
-    img {
-        width: 100%;
-        max-width: 400px;
-        margin: 0 0 1em 0;
-    }
-
-    p {
-        margin: 1em auto;
-    }
-
-    @media (min-width: 480px) {
-        h1 {
-            font-size: 4em;
-        }
-    }
-</style>
+    // query a subset of the preloaded data (using dummy favorites as an example)
+    const favorites = query(client, { query: GET_FAVORITES })
+</script>
 
 <svelte:head>
-    <title>Sapper project template</title>
+    <title>Factorio Blueprint Database | Factorio Tools</title>
 </svelte:head>
 
 <h1>Test staging!</h1>
 
-<figure>
-    <img alt="Borat" src="great-success.png" />
-    <figcaption>HIGH FIVE!</figcaption>
-</figure>
+<!-- Component example-->
+<Posts />
 
-<p>
-    <strong>Try editing this file (src/routes/index.svelte) to test live reloading.</strong>
-</p>
-
-<h3>GraphQL Test:</h3>
-{#await $books}
-    Loading...
+<!-- Inline example-->
+<h3>Favorites:</h3>
+<!-- Note $ sign needed here to correctly refresh this once promise resolves -->
+{#await $favorites}
+    Loading won't be shown if preloaded
 {:then result}
     <ul>
-        {#each result.data.posts as post}
+        {#each result.data.favorites as favorite}
             <li>
-                <b>{post.title}</b>
-                by {post.author.firstName} {post.author.lastName}
+                <b>{favorite.title}</b>
             </li>
         {/each}
     </ul>
 {:catch error}
-    Error: {error}
+    <p>Error preloading favorites: {error}</p>
 {/await}

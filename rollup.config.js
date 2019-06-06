@@ -26,8 +26,12 @@ export default {
                 emitCss: true,
                 ...svelteConfig
             }),
-            resolve({ extensions: ['.js', '.ts', '.mjs', '.json'] }),
-            commonjs(),
+            resolve({ browser: true, extensions: ['.mjs', '.js', '.ts', '.json'] }),
+            commonjs({
+                namedExports: {
+                    'node_modules/subscriptions-transport-ws/dist/index.js': ['SubscriptionClient']
+                }
+            }),
             sucrase({
                 include: ['**/*.ts'],
                 exclude: ['node_modules/**'],
@@ -35,9 +39,9 @@ export default {
             }),
 
             !dev &&
-                terser({
-                    module: true
-                })
+            terser({
+                module: true
+            })
         ]
     },
 

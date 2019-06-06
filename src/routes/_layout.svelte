@@ -1,16 +1,14 @@
 <script>
+    import ApolloClient from 'apollo-client'
+    import { setClient } from 'svelte-apollo'
+
+    import { client } from '../data/client.js'
+
     import Header from '../components/Layout/Header/Header.svelte'
     import Footer from '../components/Layout/Footer/Footer.svelte'
 
-    import ApolloClient from 'apollo-boost'
-    import { setClient } from 'svelte-apollo'
-    import isNode from 'detect-node'
-
-    // Needed because node-fetch needs an absolute URI
-    const uri = isNode ? `http://localhost:${process.env.PORT}/graphql` : '/graphql'
-    const client = new ApolloClient({ uri })
+    // Client gets passed down to all children. Only need this once
     setClient(client)
-
     export let segment
 </script>
 
