@@ -1,6 +1,6 @@
-import { gql } from 'apollo-boost';
+import { gql } from 'apollo-boost'
 
-export const HOME_ALL = gql`
+const HOME_ALL = gql`
     {
         posts {
             title
@@ -15,7 +15,7 @@ export const HOME_ALL = gql`
     }
 `
 
-export const GET_POSTS = gql`
+const GET_POSTS = gql`
     {
         posts {
             title
@@ -27,10 +27,12 @@ export const GET_POSTS = gql`
     }
 `
 
-export const GET_FAVORITES = gql`
+const GET_FAVORITES = gql`
     {
         favorites {
             title
         }
     }
 `
+
+export { HOME_ALL, GET_POSTS, GET_FAVORITES }
