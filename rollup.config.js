@@ -6,6 +6,7 @@ import { terser } from 'rollup-plugin-terser'
 import sucrase from 'rollup-plugin-sucrase'
 import config from 'sapper/config/rollup.js'
 import pkg from './package.json'
+import graphql from '@kocal/rollup-plugin-graphql'
 const svelteConfig = require('./svelte.config')
 
 const mode = process.env.NODE_ENV
@@ -28,6 +29,7 @@ export default {
             }),
             resolve({ /*browser: true,*/ extensions: ['.mjs', '.js', '.ts', '.json'] }),
             commonjs(),
+            graphql(),
             sucrase({
                 include: ['**/*.ts'],
                 exclude: ['node_modules/**'],
@@ -56,6 +58,7 @@ export default {
             }),
             resolve({ extensions: ['.js', '.ts', '.mjs', '.json'] }),
             commonjs(),
+            graphql(),
             sucrase({
                 include: ['**/*.ts'],
                 exclude: ['node_modules/**'],

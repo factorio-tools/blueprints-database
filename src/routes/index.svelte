@@ -1,7 +1,7 @@
 <script context="module">
-    import { HOME_ALL } from '../data/queries.ts'
+    import { HOME_ALL } from '../data/queries.gql'
     // We can't use getClient() here. Instead use temp client to fetch cache data
-    import { client as client_temp } from '../data/client.ts'
+    import { client as client_temp } from '../data/client'
 
     // Query everything needed for entire route into preload here.
     // Then future data can be queried against the cache
@@ -18,7 +18,7 @@
 <script>
     import { restore, query, getClient } from 'svelte-apollo'
     import Posts from '../components/Posts/Posts.svelte'
-    import { GET_FAVORITES } from '../data/queries.ts'
+    import { GET_FAVORITES } from '../data/queries.gql'
 
     export let cache
 

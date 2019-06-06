@@ -1,5 +1,4 @@
-import { gql, IResolvers } from 'apollo-server-express'
-import { DocumentNode } from 'graphql'
+import { IResolvers } from 'apollo-server-express'
 
 // example data
 const authors = [
@@ -14,44 +13,7 @@ const posts = [
     { id: 4, authorId: 3, title: 'Launchpad is Cool', votes: 7 }
 ]
 
-const favorites = [
-    { id: 1, title: 'Favorite 1' },
-    { id: 2, title: 'Favorite 2'},
-]
-
-const typeDefs: DocumentNode = gql`
-    type Author {
-        id: Int!
-        firstName: String
-        lastName: String
-        "the list of Posts by this author"
-        posts: [Post]
-    }
-
-    type Post {
-        id: Int!
-        title: String
-        author: Author
-        votes: Int
-    }
-
-    type Favorite {
-        id: Int!
-        title: String
-    }
-
-    # the schema allows the following query:
-    type Query {
-        posts: [Post]
-        favorites: [Favorite]
-        author(id: Int!): Author
-    }
-
-    # this schema allows the following mutation:
-    type Mutation {
-        upvotePost(postId: Int!): Post
-    }
-`
+const favorites = [{ id: 1, title: 'Favorite 1' }, { id: 2, title: 'Favorite 2' }]
 
 const resolvers: IResolvers = {
     Query: {
@@ -80,4 +42,4 @@ const resolvers: IResolvers = {
     }
 }
 
-export { typeDefs, resolvers }
+export default resolvers

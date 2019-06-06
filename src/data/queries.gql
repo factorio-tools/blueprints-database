@@ -1,0 +1,28 @@
+query HOME_ALL {
+    posts {
+        title
+        author {
+            firstName
+            lastName
+        }
+    }
+    favorites {
+        title
+    }
+}
+
+query GET_POSTS {
+    posts {
+        title
+        author {
+            firstName
+            lastName
+        }
+    }
+}
+
+query GET_FAVORITES {
+    favorites {
+        title
+    }
+}

@@ -4,7 +4,8 @@ import compression from 'compression'
 import * as sapper from '@sapper/server'
 // import orango from 'orango'
 import { ApolloServer } from 'apollo-server-express'
-import { typeDefs, resolvers } from './graphql'
+import resolvers from './resolvers'
+import schema from './schema.gql'
 
 const { PORT, NODE_ENV } = process.env
 const dev = NODE_ENV === 'development'
@@ -25,7 +26,7 @@ if (dev) {
 const app = express()
 
 const server = new ApolloServer({
-    typeDefs,
+    typeDefs: schema,
     resolvers
 })
 server.applyMiddleware({ app, path: '/graphql' })

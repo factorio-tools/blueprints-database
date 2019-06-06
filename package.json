@@ -16,6 +16,7 @@
         "sirv": "^0.4.2"
     },
     "devDependencies": {
+        "@kocal/rollup-plugin-graphql": "^1.0.0",
         "@pyoner/svelte-types": "^3.1.0-4",
         "@types/compression": "0.0.36",
         "@types/dotenv": "^6.1.1",
