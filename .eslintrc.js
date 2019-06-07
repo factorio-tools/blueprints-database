@@ -14,6 +14,13 @@ module.exports = {
         // it doesn't support svelte preprocessors and prettier
         // when ready also uncomment the needed vscode workspace settings
     ],
+    settings: {
+        'import/resolver': {
+            node: {
+                extensions: ['.js', '.ts', '.mjs']
+            }
+        }
+    },
     extends: [
         'eslint:recommended',
         'plugin:@typescript-eslint/recommended',
