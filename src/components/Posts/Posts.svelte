@@ -1,6 +1,6 @@
 <script>
     import { getClient, query } from 'svelte-apollo'
-    import { GET_POSTS } from '../../data/queries.gql'
+    import { GET_POSTS } from '../../graphql/queries.gql'
 
     const client = getClient()
 

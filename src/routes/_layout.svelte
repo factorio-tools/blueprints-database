@@ -1,7 +1,7 @@
 <script>
     import { setClient } from 'svelte-apollo'
 
-    import { client } from '../data/client.ts'
+    import { client } from '../graphql/client.ts'
 
     import Header from '../components/Layout/Header/Header.svelte'
     import Footer from '../components/Layout/Footer/Footer.svelte'
