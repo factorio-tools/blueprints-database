@@ -24,6 +24,9 @@
         border-right: 1px solid rgba(255, 255, 255, 0.2);
         box-sizing: content-box;
     }
+    #logo {
+        width: 400px;
+    }
     h1 {
         text-decoration: none;
         text-transform: uppercase;
@@ -39,7 +42,7 @@
 <header>
     <div class="logo_container">
         <a href="/">
-            <img src="/factorio_tools_logo.svg" alt="Factorio Tools" />
+            <img src="/factorio_tools_logo.svg" alt="Factorio Tools" id="logo" />
         </a>
         <a href="/">
             <h1>Blueprints Database</h1>
