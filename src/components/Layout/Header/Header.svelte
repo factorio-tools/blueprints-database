@@ -46,7 +46,7 @@
         </a>
     </div>
     <nav>
-        <Button text="ADD BLUEPRINT" href="/about" icon="plus" color="yellow" />
+        <Button text="ADD BLUEPRINT" href="/blueprint/add" icon="plus" color="yellow" />
         <Button text="LarryCarryOW" href="/blog" icon="user-astronaut" />
     </nav>
 </header>
