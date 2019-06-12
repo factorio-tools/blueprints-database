@@ -1,12 +1,14 @@
 import { IResolvers } from 'apollo-server-express'
-import { Response } from 'express'
+import { Request, Response } from 'express'
 import { EmailAddress } from '@okgrow/graphql-scalars'
 import { setAuthCookie, clearAuthCookie } from '../auth/middleware'
 import { issueNewToken } from '../auth/jwt'
 import User from '../models/user'
+import { getSteamID } from '../auth/steam'
 
 interface GQLContext {
     user: User
+    req: Request
     res: Response
 }
 
@@ -42,6 +44,19 @@ const resolvers: IResolvers<any, GQLContext> = {
             }
             post.votes += 1
             return post
+        },
+        registerWithSteam: (obj, { username, email }, context) => {
+            if (context.user) {
+                return new Error('already logged in')
+            } else {
+                return getSteamID(context.req, context.res).then(steamID =>
+                    User.createUsingSteamID(steamID, username, email).then(user => {
+                        const token = issueNewToken(user)
+                        setAuthCookie(context.res, token)
+                        return user
+                    })
+                )
+            }
         },
         register: (obj, { username, password, email }, context) => {
             if (context.user) {

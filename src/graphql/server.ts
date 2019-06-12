@@ -22,7 +22,8 @@ const initGQLServer = (app: Application) => {
         formatError,
         context: ({ req, res }) => ({
             user: req.user,
-            res: res
+            req,
+            res
         }),
         playground: env.IS_DEV_ENV ? playgroundOpts : false
     })

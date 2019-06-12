@@ -8,3 +8,4 @@ node_modules
 deploy
 deploy_key
 JWT_KEY
+STEAM_KEY

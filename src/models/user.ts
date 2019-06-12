@@ -87,8 +87,30 @@ const User = {
                 reject(new Error('invalid credentials!'))
             }
         }),
-    getUsingSteamID: (id: string): Promise<User | undefined> => Promise.resolve(user),
-    createUsingSteamID: (id: string): Promise<User> => Promise.resolve(user)
+    getUsingSteamID: (steamID: string): Promise<User | undefined> => Promise.resolve(steamIDToUser.get(steamID)),
+    createUsingSteamID: (steamID: string, username: string, email?: string): Promise<User> =>
+        new Promise((resolve, reject) => {
+            const steamIDExists = steamIDToUser.has(steamID)
+            if (steamIDExists) {
+                reject(new Error('account already exists!'))
+            } else {
+                const exists = usernameToUser.has(username)
+                if (exists) {
+                    reject(new Error('username taken!'))
+                } else {
+                    // create new user
+                    resolve({
+                        id: '4',
+                        steamID,
+                        username,
+                        role: 'user',
+                        jwtEpoch: 'some_random_val_04',
+                        extraPerm: '',
+                        email
+                    })
+                }
+            }
+        })
 }
 
 export default User

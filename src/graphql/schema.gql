@@ -40,6 +40,7 @@ type Query {
 # this schema allows the following mutation:
 type Mutation {
     upvotePost(postId: Int!): Post
+    registerWithSteam(username: String!, email: EmailAddress): User
     register(username: String!, password: String!, email: EmailAddress): User
     login(username: String!, password: String!): User
     logout: Boolean
