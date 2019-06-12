@@ -1,8 +1,8 @@
 <script>
-    import { blueprintPreviewStore } from '../../stores'
+    import { blueprintPreviewStore as bppStore } from '../../stores'
 
     const handleChange = e => {
-        blueprintPreviewStore.set({ ...blueprintPreviewStore, title: e.target.value || 'Short title of my blueprint' })
+        bppStore.setState({ title: e.target.value || bppStore.defaultProps.title })
     }
 </script>
 
