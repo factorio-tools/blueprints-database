@@ -1,6 +1,8 @@
 <script>
     import StatItem from './parts/StatItem.svelte'
     import { goto } from '../../utils/ui-utils.ts'
+
+    export let title
 </script>
 
 <style lang="scss">
@@ -9,7 +11,7 @@
         padding: 19px 19px 15px 19px;
         width: 370px;
     }
-    h2 {
+    h3 {
         font-size: 25px;
         font-weight: 700;
         margin-bottom: 7px;
@@ -42,7 +44,7 @@
 
 <article>
     <header>
-        <h2>Modular Starter Base</h2>
+        <h3>{title}</h3>
     </header>
     <section class="social_bar">
         <StatItem text="22" icon="heart" color="#bb81ac" />
