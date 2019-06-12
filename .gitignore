@@ -7,3 +7,4 @@ node_modules
 .env
 deploy
 deploy_key
+JWT_KEY

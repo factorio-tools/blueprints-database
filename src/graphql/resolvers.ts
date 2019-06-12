@@ -1,4 +1,14 @@
 import { IResolvers } from 'apollo-server-express'
+import { Response } from 'express'
+import { EmailAddress } from '@okgrow/graphql-scalars'
+import { setAuthCookie, clearAuthCookie } from '../auth/middleware'
+import { issueNewToken } from '../auth/jwt'
+import User from '../models/user'
+
+interface GQLContext {
+    user: User
+    res: Response
+}
 
 // example data
 const authors = [
@@ -15,7 +25,9 @@ const posts = [
 
 const favorites = [{ id: 1, title: 'Favorite 1' }, { id: 2, title: 'Favorite 2' }]
 
-const resolvers: IResolvers = {
+const resolvers: IResolvers<any, GQLContext> = {
+    EmailAddress,
+
     Query: {
         posts: () => posts,
         favorites: () => favorites,
@@ -30,6 +42,35 @@ const resolvers: IResolvers = {
             }
             post.votes += 1
             return post
+        },
+        register: (obj, { username, password, email }, context) => {
+            if (context.user) {
+                return new Error('already logged in')
+            } else {
+                return User.create(username, password, email).then(user => {
+                    const token = issueNewToken(user)
+                    setAuthCookie(context.res, token)
+                    return user
+                })
+            }
+        },
+        login: (obj, { username, password }, context) => {
+            if (context.user) {
+                return new Error('already logged in')
+            } else {
+                return User.getUsingUsernameAndPassword(username, password).then(user => {
+                    const token = issueNewToken(user)
+                    setAuthCookie(context.res, token)
+                    return user
+                })
+            }
+        },
+        logout: (obj, args, context) => {
+            if (context.user) {
+                clearAuthCookie(context.res)
+                return true
+            }
+            return new Error('not logged in')
         }
     },
 

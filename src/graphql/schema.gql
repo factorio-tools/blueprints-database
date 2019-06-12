@@ -1,3 +1,10 @@
+# https://github.com/graphql/graphql-js/blob/master/src/language/directiveLocation.js
+directive @isAuthenticated on FIELD_DEFINITION
+# TODO: remove hasScope and add hasRole and hasPermission
+directive @hasScope(scope: [String]) on FIELD_DEFINITION
+
+scalar EmailAddress
+
 type Author {
     id: Int!
     firstName: String
@@ -18,14 +25,22 @@ type Favorite {
     title: String
 }
 
+type User {
+    id: Int!
+    username: String
+}
+
 # the schema allows the following query:
 type Query {
     posts: [Post]
-    favorites: [Favorite]
+    favorites: [Favorite] # @isAuthenticated
     author(id: Int!): Author
 }
 
 # this schema allows the following mutation:
 type Mutation {
     upvotePost(postId: Int!): Post
+    register(username: String!, password: String!, email: EmailAddress): User
+    login(username: String!, password: String!): User
+    logout: Boolean
 }

@@ -1,14 +1,14 @@
 <script context="module">
     import { HOME_ALL } from '../graphql/queries.gql'
-    // We can't use getClient() here. Instead use temp client to fetch cache data
-    import { client as client_temp } from '../graphql/client'
+    import { initGQLClient, client } from '../graphql/client'
 
     // Query everything needed for entire route into preload here.
     // Then future data can be queried against the cache
     // So each main page route will load all data this way
-    export async function preload() {
+    export async function preload(page, session) {
+        initGQLClient(session.authToken)
         return {
-            cache: await client_temp.query({
+            cache: await client.query({
                 query: HOME_ALL
             })
         }
@@ -16,14 +16,14 @@
 </script>
 
 <script>
-    import { restore, query, getClient } from 'svelte-apollo'
+    import { restore, query } from 'svelte-apollo'
     import Posts from '../components/Posts/Posts.svelte'
     import { GET_FAVORITES } from '../graphql/queries.gql'
 
     export let cache
 
-    // Get actual client
-    const client = getClient()
+    initGQLClient()
+
     // Init data from cache
     restore(client, HOME_ALL, cache.data)
 

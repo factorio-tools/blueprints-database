@@ -1,13 +1,7 @@
 <script>
-    import { setClient } from 'svelte-apollo'
-
-    import { client } from '../graphql/client.ts'
-
     import Header from '../components/Layout/Header/Header.svelte'
     import Footer from '../components/Layout/Footer/Footer.svelte'
 
-    // Client gets passed down to all children. Only need this once
-    setClient(client)
     export let segment
 </script>
 

@@ -1,8 +1,7 @@
 <script>
-    import { getClient, query } from 'svelte-apollo'
+    import { query } from 'svelte-apollo'
     import { GET_POSTS } from '../../graphql/queries.gql'
-
-    const client = getClient()
+    import { client } from '../../graphql/client'
 
     // Query prelaoded data from cache
     const posts = query(client, { query: GET_POSTS })

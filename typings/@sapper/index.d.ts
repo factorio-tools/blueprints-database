@@ -19,28 +19,10 @@ declare module '@sapper/app' {
 }
 
 declare module '@sapper/server' {
-    import { ClientRequest, ServerResponse } from 'http'
     import { RequestHandler } from 'express'
 
-    // from sapper/runtime/src/server/middleware/types.ts
-    // sapper doesn't export its types yet
-    interface Req extends ClientRequest {
-        url: string
-        baseUrl: string
-        originalUrl: string
-        method: string
-        path: string
-        params: Record<string, string>
-        query: Record<string, string>
-        headers: Record<string, string>
-    }
-    interface Res extends ServerResponse {
-        write: (data: unknown) => void
-    }
-    // end
-
     interface MiddlewareOptions {
-        session?: (req: Req, res: Res) => unknown
+        session?: (req: Express.Request, res: Express.Response) => unknown
         ignore?: unknown
     }
 

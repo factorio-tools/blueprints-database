@@ -1,10 +1,22 @@
 import ApolloClient from 'apollo-boost'
 
-// Needed so that SSR works with ApolloClient
-const fetch = process.browser ? window.fetch : require('node-fetch')
-// Needed because node-fetch needs an absolute URI
-const uri = process.browser ? '/graphql' : `http://localhost:${process.env.PORT}/graphql`
+let client
 
-const client = new ApolloClient({ uri, fetch })
+const initGQLClient = (authToken?: string) => {
+    if (process.browser) {
+        client = new ApolloClient()
+    } else {
+        client = new ApolloClient({
+            // node-fetch needs an absolute URI
+            uri: `http://localhost:${process.env.PORT}/graphql`,
+            // needed for SSR
+            fetch: require('node-fetch'),
+            // pass authToken trough sapper for SSR
+            headers: {
+                authorization: authToken ? `Bearer ${authToken}` : null
+            }
+        })
+    }
+}
 
-export { client }
+export { initGQLClient, client }
