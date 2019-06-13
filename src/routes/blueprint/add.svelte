@@ -34,6 +34,6 @@
 </svelte:head>
 
 <article>
-    <BlueprintPreview title={$blueprintPreviewStore.title} />
+    <BlueprintPreview title={$blueprintPreviewStore.title} username={$userStore.username} />
     <BlueprintForm />
 </article>

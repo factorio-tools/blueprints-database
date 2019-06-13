@@ -21,9 +21,7 @@
         font-size: 26px;
         font-weight: 500;
     }
-    input,
-    input:-webkit-autofill:hover,
-    input:-webkit-autofill:focus {
+    input {
         background: rgba(0, 0, 0, 0.2);
         color: #dedede;
         border: 1px solid #3e4349;
@@ -44,7 +42,7 @@
     }
 </style>
 
-<form>
+<form autocomplete="off">
     <header>
         <h2>ADD BLUEPRINT</h2>
     </header>

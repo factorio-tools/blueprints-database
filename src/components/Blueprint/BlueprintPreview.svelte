@@ -1,8 +1,8 @@
 <script>
-    import StatItem from './parts/StatItem.svelte'
     import { goto } from '../../utils/ui-utils.ts'
+    import StatItem from './parts/StatItem.svelte'
 
-    export let title
+    export let title, username
 </script>
 
 <style lang="scss">
@@ -51,7 +51,7 @@
         <StatItem text="457" icon="arrow-alt-circle-down" color="#86abc6" />
         <StatItem
             onClick={goto('/blog')}
-            text="LarryCarryOW"
+            text={username}
             icon="user-astronaut"
             faPrefix="fas"
             color="#a0c488"
