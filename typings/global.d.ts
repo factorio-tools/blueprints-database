@@ -15,6 +15,7 @@ interface UserData {
     id: string
     role: string
     perm: string
+    username: string
 }
 
 interface Cookies {

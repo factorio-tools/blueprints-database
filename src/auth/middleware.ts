@@ -26,7 +26,12 @@ const getTokenStatus = (
                             if (data.epoch === user.jwtEpoch) {
                                 // token expired
                                 return {
-                                    user: { id: user.id, role: user.role, perm: user.extraPerm },
+                                    user: {
+                                        id: user.id,
+                                        role: user.role,
+                                        perm: user.extraPerm,
+                                        username: user.username
+                                    },
                                     newToken: issueNewToken(user, data.expSession),
                                     expSession: data.expSession
                                 }
@@ -43,7 +48,7 @@ const getTokenStatus = (
             }
 
             // valid token
-            resolve({ user: { id: data.sub, role: data.role, perm: data.perm } })
+            resolve({ user: { id: data.sub, role: data.role, perm: data.perm, username: data.username } })
         } catch (err) {
             // invalid token
             resolve(undefined)

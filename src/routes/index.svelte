@@ -1,12 +1,11 @@
 <script context="module">
     import { HOME_ALL } from '../graphql/queries.gql'
-    import { initGQLClient, client } from '../graphql/client'
+    import { client } from '../graphql/client'
 
     // Query everything needed for entire route into preload here.
     // Then future data can be queried against the cache
     // So each main page route will load all data this way
     export async function preload(page, session) {
-        initGQLClient(session.authToken)
         return {
             cache: await client.query({
                 query: HOME_ALL
@@ -21,8 +20,6 @@
     import { GET_FAVORITES } from '../graphql/queries.gql'
 
     export let cache
-
-    initGQLClient()
 
     // Init data from cache
     restore(client, HOME_ALL, cache.data)

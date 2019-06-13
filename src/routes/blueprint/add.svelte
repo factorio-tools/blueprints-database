@@ -1,3 +1,19 @@
+<script context="module">
+    import { userStore } from '../../stores'
+
+    export async function preload(page, session) {
+        let user = {}
+
+        userStore.subscribe(value => {
+            user = value
+        })()
+
+        if (!user.username) {
+            return this.redirect(302, `/?redirect=${page.path}`)
+        }
+    }
+</script>
+
 <script>
     import { blueprintPreviewStore } from '../../stores'
     import BlueprintPreview from '../../components/Blueprint/BlueprintPreview.svelte'

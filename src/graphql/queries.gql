@@ -26,3 +26,16 @@ query GET_FAVORITES {
         title
     }
 }
+
+mutation USER_LOGOUT{
+    logout
+}
+
+mutation USER_LOGIN($username:String!, $password:String!){
+    login(username: $username, password: $password) {
+        username,
+        id,
+        role,
+        perm
+    }
+}

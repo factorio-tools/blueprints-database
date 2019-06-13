@@ -1,5 +1,8 @@
 <script>
     import Button from '../Button/Button.svelte'
+    import { client } from '../../../graphql/client'
+    import { restore, query } from 'svelte-apollo'
+    import { userStore } from '../../../stores'
     export let segment
 </script>
 
@@ -50,7 +53,8 @@
     </div>
     <nav>
         <Button text="ADD BLUEPRINT" href="/blueprint/add" icon="plus" color="yellow" />
-        <Button text="LarryCarryOW" href="/blog" icon="user-astronaut" />
+        <Button text={$userStore.username || 'Login'} onClick={userStore.login} href="#" icon="user-astronaut" />
+        <Button text="Logout" onClick={userStore.logout} href="#" icon="user-astronaut" />
     </nav>
 </header>
 

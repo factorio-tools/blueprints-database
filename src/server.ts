@@ -2,6 +2,7 @@ import sirv from 'sirv'
 import express from 'express'
 import compression from 'compression'
 import * as sapper from '@sapper/server'
+import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import { initGQLServer } from './graphql/server'
 import { initSteamAuth } from './auth/steam'
@@ -40,7 +41,8 @@ app.use(
     sirv('static', { dev: env.IS_DEV_ENV }),
     sapper.middleware({
         session: req => ({
-            authToken: req.cookies[constants.AUTH_TOKEN_NAME]
+            authToken: req.cookies[constants.AUTH_TOKEN_NAME],
+            user: req.user
         })
     })
 )

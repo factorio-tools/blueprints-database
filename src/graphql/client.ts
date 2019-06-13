@@ -1,6 +1,6 @@
 import ApolloClient from 'apollo-boost'
 
-let client
+let client: ApolloClient<{}>
 
 const initGQLClient = (authToken?: string) => {
     if (process.browser) {

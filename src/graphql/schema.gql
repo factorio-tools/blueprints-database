@@ -27,7 +27,9 @@ type Favorite {
 
 type User {
     id: Int!
-    username: String
+    username: String,
+    role: String,
+    perm: String
 }
 
 # the schema allows the following query:

@@ -13,6 +13,7 @@ interface JWTPayload {
     iss: string
     iat: number
     exp: number
+    username: string
 }
 
 // TODO: move key in db
@@ -26,6 +27,7 @@ const issueNewToken = (user: User, expSession?: number) => {
         {
             role: user.role,
             perm: user.extraPerm,
+            username: user.username,
             epoch: user.jwtEpoch,
             expSession: expSession ? expSession : now + constants.SESSION_LENGTH,
             exp: now + constants.TOKEN_LIFESPAN
