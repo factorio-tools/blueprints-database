@@ -1,11 +1,13 @@
 import ApolloClient from 'apollo-boost'
 
-let client: ApolloClient<{}>
+let client: ApolloClient<unknown>
 
-const initGQLClient = (authToken?: string) => {
-    if (process.browser) {
-        client = new ApolloClient()
-    } else {
+if (process.browser) {
+    client = new ApolloClient()
+}
+
+const initSSRGQLClient = (authToken?: string) => {
+    if (!process.browser) {
         client = new ApolloClient({
             // node-fetch needs an absolute URI
             uri: `http://localhost:${process.env.PORT}/graphql`,
@@ -19,4 +21,4 @@ const initGQLClient = (authToken?: string) => {
     }
 }
 
-export { initGQLClient, client }
+export { initSSRGQLClient, client }

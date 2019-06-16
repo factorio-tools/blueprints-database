@@ -1,9 +1,9 @@
 <script context="module">
-    import { initGQLClient } from '../graphql/client'
+    import { initSSRGQLClient } from '../graphql/client'
     import { userStore } from '../stores'
     export async function preload(page, session) {
         const { user, authToken } = session
-        initGQLClient(authToken)
+        initSSRGQLClient(authToken)
         userStore.setState(user)
     }
 </script>
@@ -11,7 +11,7 @@
 <script>
     import Header from '../components/Layout/Header/Header.svelte'
     import Footer from '../components/Layout/Footer/Footer.svelte'
-    initGQLClient()
+
     export let segment
 </script>
 
