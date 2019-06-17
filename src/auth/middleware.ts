@@ -67,7 +67,10 @@ const setAuthCookie = (res: Response, token: string, expires = util.currentUnixT
 }
 
 const clearAuthCookie = (res: Response) => {
-    res.clearCookie(constants.AUTH_TOKEN_NAME, { domain: env.MAIN_DOMAIN, path: '/' })
+    res.clearCookie(constants.AUTH_TOKEN_NAME, {
+        domain: env.MAIN_DOMAIN,
+        path: '/'
+    })
 }
 
 const attachUserToContext = (getUserFromDB: (id: string) => Promise<User | undefined>): RequestHandler => (

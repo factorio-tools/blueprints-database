@@ -3,10 +3,10 @@ import replace from 'rollup-plugin-replace'
 import commonjs from 'rollup-plugin-commonjs'
 import svelte from 'rollup-plugin-svelte'
 import { terser } from 'rollup-plugin-terser'
-import sucrase from 'rollup-plugin-sucrase'
 import config from 'sapper/config/rollup.js'
 import pkg from './package.json'
 import graphql from '@kocal/rollup-plugin-graphql'
+import typescript from 'rollup-plugin-typescript2'
 const svelteConfig = require('./svelte.config')
 
 const mode = process.env.NODE_ENV
@@ -30,10 +30,8 @@ export default {
             resolve({ browser: true, extensions: ['.mjs', '.js', '.ts', '.json'] }),
             commonjs(),
             graphql(),
-            sucrase({
-                include: ['**/*.ts'],
-                exclude: ['node_modules/**'],
-                transforms: ['typescript']
+            typescript({
+                check: false
             }),
 
             !dev &&
@@ -59,10 +57,8 @@ export default {
             resolve({ extensions: ['.js', '.ts', '.mjs', '.json'] }),
             commonjs(),
             graphql(),
-            sucrase({
-                include: ['**/*.ts'],
-                exclude: ['node_modules/**'],
-                transforms: ['typescript']
+            typescript({
+                check: false
             })
         ],
         external: Object.keys(pkg.dependencies).concat(
@@ -80,10 +76,8 @@ export default {
                 'process.env.NODE_ENV': JSON.stringify(mode)
             }),
             commonjs(),
-            sucrase({
-                include: ['**/*.ts'],
-                exclude: ['node_modules/**'],
-                transforms: ['typescript']
+            typescript({
+                check: false
             }),
             !dev && terser()
         ]

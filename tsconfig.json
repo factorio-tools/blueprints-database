@@ -2,8 +2,18 @@
     "include": ["src/**/*", "typings/global.d.ts"],
     "exclude": ["node_modules/*"],
     "compilerOptions": {
-        "lib": ["es5", "es6", "webworker", "dom", "dom.iterable", "es2016.array.include", "es2017.object"],
-        "target": "es6",
+        "lib": [
+            "es5",
+            "es6",
+            "webworker",
+            "dom",
+            "dom.iterable",
+            "es2016.array.include",
+            "es2017.object",
+            "es2016",
+            "esnext.asynciterable"
+        ],
+        "target": "es2019",
         "module": "esnext",
         "moduleResolution": "node",
         "allowSyntheticDefaultImports": true,
@@ -13,6 +23,8 @@
         "sourceMap": true,
         "noImplicitAny": true,
         "skipLibCheck": true,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
         "typeRoots": ["node_modules/@types", "typings"]
     }
 }

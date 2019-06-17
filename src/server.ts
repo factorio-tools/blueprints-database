@@ -2,7 +2,6 @@ import sirv from 'sirv'
 import express from 'express'
 import compression from 'compression'
 import * as sapper from '@sapper/server'
-import bodyParser from 'body-parser'
 import cookieParser from 'cookie-parser'
 import { initGQLServer } from './graphql/server'
 import { initSteamAuth } from './auth/steam'
@@ -34,17 +33,17 @@ initSteamAuth({
     tempPath: '/steamtemp'
 })
 
-initGQLServer(app)
-
-app.use(
-    compression({ threshold: 0 }),
-    sirv('static', { dev: env.IS_DEV_ENV }),
-    sapper.middleware({
-        session: req => ({
-            authToken: req.cookies[constants.AUTH_TOKEN_NAME],
-            user: req.user
+initGQLServer(app).then(() => {
+    app.use(
+        compression({ threshold: 0 }),
+        sirv('static', { dev: env.IS_DEV_ENV }),
+        sapper.middleware({
+            session: req => ({
+                authToken: req.cookies[constants.AUTH_TOKEN_NAME],
+                user: req.user
+            })
         })
-    })
-)
+    )
 
-app.listen(env.PORT)
+    app.listen(env.PORT)
+})

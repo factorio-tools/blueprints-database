@@ -5,6 +5,7 @@ node_modules
 /build/
 /src/manifest/
 .env
+.rpt2_cache
 deploy
 deploy_key
 JWT_KEY
