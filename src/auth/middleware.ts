@@ -29,7 +29,7 @@ const getTokenStatus = (
                                     user: {
                                         id: user.id,
                                         role: user.role,
-                                        perm: user.extraPerm,
+                                        extraPerm: user.extraPerm,
                                         username: user.username
                                     },
                                     newToken: issueNewToken(user, data.expSession),
@@ -48,7 +48,7 @@ const getTokenStatus = (
             }
 
             // valid token
-            resolve({ user: { id: data.sub, role: data.role, perm: data.perm, username: data.username } })
+            resolve({ user: { id: data.sub, role: data.role, extraPerm: data.perm, username: data.username } })
         } catch (err) {
             // invalid token
             resolve(undefined)

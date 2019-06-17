@@ -27,15 +27,15 @@ query GET_FAVORITES {
     }
 }
 
-mutation USER_LOGOUT{
+mutation USER_LOGOUT {
     logout
 }
 
-mutation USER_LOGIN($username:String!, $password:String!){
+mutation USER_LOGIN($username: String!, $password: String!) {
     login(username: $username, password: $password) {
-        username,
-        id,
-        role,
-        perm
+        username
+        id
+        role
+        extraPerm
     }
 }

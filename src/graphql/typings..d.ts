@@ -10,14 +10,15 @@ interface User {
     username: string
     role: string
     jwtEpoch: string
-    extraPerm: string
+    extraPerm: string[]
     password?: string
     email?: string
 }
 
+// Subset of User
 interface UserData {
     id: string
     role: string
-    perm: string
+    extraPerm: string[]
     username: string
 }

@@ -97,7 +97,7 @@ class UserResolver {
         }
     }
 
-    @Mutation(() => User)
+    @Mutation(() => Boolean)
     public logout(@Ctx('user') user: User, @Ctx('res') res: Response) {
         if (user) {
             clearAuthCookie(res)

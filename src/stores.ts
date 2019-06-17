@@ -11,7 +11,7 @@ interface UserProps {
     username: string
     id: string
     role: string
-    perm: string
+    perm: string[]
 }
 
 function createBlueprintPreviewStore() {
@@ -33,7 +33,7 @@ function createUserStore() {
         username: '',
         id: '',
         role: '',
-        perm: ''
+        perm: []
     }
     const { subscribe, set, update } = writable({ ...defaultProps })
 

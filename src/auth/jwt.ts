@@ -5,7 +5,7 @@ import util from '../utils/util'
 
 interface JWTPayload {
     role: string
-    perm: string
+    perm: string[]
     epoch: string
     expSession: number
     sub: string

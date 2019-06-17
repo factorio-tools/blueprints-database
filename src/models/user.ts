@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt'
+
 const saltRounds = 10
 
 const users: User[] = [
@@ -8,7 +9,7 @@ const users: User[] = [
         username: 'username00',
         role: 'user',
         jwtEpoch: 'some_random_val_00',
-        extraPerm: '',
+        extraPerm: [],
         email: 'user0@test.com',
         password: '$2b$10$03K7vNR612di0gWm1YXtS.bftY0AYC8y0hxu5aymroV1wQ.pqrIw6'
     },
@@ -18,7 +19,7 @@ const users: User[] = [
         username: 'username01',
         role: 'user',
         jwtEpoch: 'some_random_val_01',
-        extraPerm: '',
+        extraPerm: [],
         email: 'user1@test.com'
     },
     {
@@ -27,7 +28,7 @@ const users: User[] = [
         username: 'username02',
         role: 'user',
         jwtEpoch: 'some_random_val_02',
-        extraPerm: '',
+        extraPerm: [],
         email: 'user2@test.com'
     },
     {
@@ -36,7 +37,7 @@ const users: User[] = [
         username: 'username03',
         role: 'user',
         jwtEpoch: 'some_random_val_03',
-        extraPerm: '',
+        extraPerm: [],
         email: 'user3@test.com'
     }
 ]
@@ -65,7 +66,7 @@ const User = {
                         username: 'username04',
                         role: 'user',
                         jwtEpoch: 'some_random_val_04',
-                        extraPerm: '',
+                        extraPerm: [],
                         password: pass,
                         email
                     })
@@ -105,7 +106,7 @@ const User = {
                         username,
                         role: 'user',
                         jwtEpoch: 'some_random_val_04',
-                        extraPerm: '',
+                        extraPerm: [],
                         email
                     })
                 }
