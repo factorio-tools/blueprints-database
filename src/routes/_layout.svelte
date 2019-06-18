@@ -1,6 +1,6 @@
 <script context="module">
-    import { initSSRGQLClient } from '../graphql/client'
-    import { userStore } from '../stores'
+    import { initSSRGQLClient } from '~/graphql/client'
+    import { userStore } from '~/stores'
     export async function preload(page, session) {
         const { user, authToken } = session
         initSSRGQLClient(authToken)
@@ -9,8 +9,8 @@
 </script>
 
 <script>
-    import Header from '../components/Layout/Header/Header.svelte'
-    import Footer from '../components/Layout/Footer/Footer.svelte'
+    import Header from '~/components/Layout/Header/Header.svelte'
+    import Footer from '~/components/Layout/Footer/Footer.svelte'
 
     export let segment
 </script>

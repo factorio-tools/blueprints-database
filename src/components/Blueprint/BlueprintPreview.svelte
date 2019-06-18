@@ -1,5 +1,5 @@
 <script>
-    import { goto } from '../../utils/ui-utils.ts'
+    import { goto } from '~/utils/ui-utils.ts'
     import StatItem from './parts/StatItem.svelte'
 
     export let title, username

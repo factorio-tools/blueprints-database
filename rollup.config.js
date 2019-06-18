@@ -1,11 +1,13 @@
+import alias from 'rollup-plugin-alias'
+import commonjs from 'rollup-plugin-commonjs'
+import config from 'sapper/config/rollup.js'
+import graphql from '@kocal/rollup-plugin-graphql'
+var path = require('path')
+import pkg from './package.json'
 import resolve from 'rollup-plugin-node-resolve'
 import replace from 'rollup-plugin-replace'
-import commonjs from 'rollup-plugin-commonjs'
 import svelte from 'rollup-plugin-svelte'
 import { terser } from 'rollup-plugin-terser'
-import config from 'sapper/config/rollup.js'
-import pkg from './package.json'
-import graphql from '@kocal/rollup-plugin-graphql'
 import typescript from 'rollup-plugin-typescript2'
 const svelteConfig = require('./svelte.config')
 
@@ -29,6 +31,10 @@ export default {
             }),
             resolve({ browser: true, extensions: ['.mjs', '.js', '.ts', '.json'] }),
             commonjs(),
+            alias({
+                resolve: ['.js', '.ts', '.gql', '.svelte'],
+                '~': path.join(__dirname, './src')
+            }),
             graphql(),
             typescript({
                 check: false
@@ -56,6 +62,10 @@ export default {
             }),
             resolve({ extensions: ['.js', '.ts', '.mjs', '.json'] }),
             commonjs(),
+            alias({
+                resolve: ['.js', '.ts', '.gql', '.svelte'],
+                '~': path.join(__dirname, './src')
+            }),
             graphql(),
             typescript({
                 check: false
@@ -76,6 +86,10 @@ export default {
                 'process.env.NODE_ENV': JSON.stringify(mode)
             }),
             commonjs(),
+            alias({
+                resolve: ['.js', '.ts', '.gql', '.svelte'],
+                '~': path.join(__dirname, './src')
+            }),
             typescript({
                 check: false
             }),

@@ -1,8 +1,8 @@
 <script>
     import Button from '../Button/Button.svelte'
-    import { client } from '../../../graphql/client'
+    import { client } from '~/graphql/client'
     import { restore, query } from 'svelte-apollo'
-    import { userStore } from '../../../stores'
+    import { userStore } from '~/stores'
     export let segment
 </script>
 

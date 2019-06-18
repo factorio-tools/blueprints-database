@@ -1,5 +1,5 @@
 <script context="module">
-    import { userStore } from '../../stores'
+    import { userStore } from '~/stores'
 
     export async function preload(page, session) {
         let user = {}
@@ -15,9 +15,9 @@
 </script>
 
 <script>
-    import { blueprintPreviewStore } from '../../stores'
-    import BlueprintPreview from '../../components/Blueprint/BlueprintPreview.svelte'
-    import BlueprintForm from '../../components/Blueprint/BlueprintForm.svelte'
+    import { blueprintPreviewStore } from '~/stores'
+    import BlueprintPreview from '~/components/Blueprint/BlueprintPreview.svelte'
+    import BlueprintForm from '~/components/Blueprint/BlueprintForm.svelte'
 </script>
 
 <style lang="scss">

@@ -1,6 +1,6 @@
 <script context="module">
-    import { HOME_ALL } from '../graphql/queries.gql'
-    import { client } from '../graphql/client'
+    import { HOME_ALL } from '~/graphql/queries.gql'
+    import { client } from '~/graphql/client'
 
     // Query everything needed for entire route into preload here.
     // Then future data can be queried against the cache
@@ -16,8 +16,8 @@
 
 <script>
     import { restore, query } from 'svelte-apollo'
-    import Posts from '../components/Posts/Posts.svelte'
-    import { GET_FAVORITES } from '../graphql/queries.gql'
+    import Posts from '~/components/Posts/Posts.svelte'
+    import { GET_FAVORITES } from '~/graphql/queries.gql'
 
     export let cache
 
