@@ -44,6 +44,10 @@ const cb = (steamID: string, res: Response) => {
     })
 }
 
+const clearSteamIDCookie = (res: Response) => {
+    res.clearCookie(STEAM_ID_COOKIE_NAME)
+}
+
 const getSteamID = (req: Request, res: Response): Promise<string> =>
     new Promise((resolve, reject) => {
         const cookie = req.cookies[STEAM_ID_COOKIE_NAME]
@@ -52,9 +56,8 @@ const getSteamID = (req: Request, res: Response): Promise<string> =>
                 const steamID = JWE.decrypt(cookie, STEAM_ID_COOKIE_KEY).toString()
                 resolve(steamID)
             } catch {
+                clearSteamIDCookie(res)
                 reject(new Error('steamID not valid!'))
-            } finally {
-                res.clearCookie(STEAM_ID_COOKIE_NAME)
             }
         } else {
             reject(new Error('no steamID cookie provided!'))
@@ -100,4 +103,4 @@ const initSteamAuth = (opts: Options) => {
     })
 }
 
-export { initSteamAuth, getSteamID }
+export { initSteamAuth, getSteamID, clearSteamIDCookie }

@@ -1,0 +1,19 @@
+type User @rootEntity {
+    steamID: String @unique
+    username: String! @unique
+    role: String!
+    jwtEpoch: String!
+    extraPerm: [String!]!
+    password: String
+    email: String
+}
+
+# type Movie @rootEntity {
+#     title: String
+#     actors: Actor @relation
+# }
+
+# type Actor @rootEntity {
+#     name: String
+#     movies: Movie @relation(inverseOf: "actors")
+# }

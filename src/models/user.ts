@@ -1,116 +1,103 @@
 import bcrypt from 'bcrypt'
+import { JWK } from '@panva/jose'
+import { dbClient } from '../database/client'
+import {
+    GET_USER_WITH_ID,
+    GET_USER_WITH_USERNAME,
+    GET_USER_WITH_STEAMID,
+    CREATE_USER_WITH_PASSWORD,
+    CREATE_USER_WITH_STEAMID
+} from '../database/queries.gql'
 
 const saltRounds = 10
 
-const users: User[] = [
-    {
-        id: '0',
-        steamID: '10',
-        username: 'username00',
-        role: 'user',
-        jwtEpoch: 'some_random_val_00',
-        extraPerm: [],
-        email: 'user0@test.com',
-        password: '$2b$10$03K7vNR612di0gWm1YXtS.bftY0AYC8y0hxu5aymroV1wQ.pqrIw6'
-    },
-    {
-        id: '1',
-        steamID: '11',
-        username: 'username01',
-        role: 'user',
-        jwtEpoch: 'some_random_val_01',
-        extraPerm: [],
-        email: 'user1@test.com'
-    },
-    {
-        id: '2',
-        steamID: '12',
-        username: 'username02',
-        role: 'user',
-        jwtEpoch: 'some_random_val_02',
-        extraPerm: [],
-        email: 'user2@test.com'
-    },
-    {
-        id: '3',
-        steamID: '13',
-        username: 'username03',
-        role: 'user',
-        jwtEpoch: 'some_random_val_03',
-        extraPerm: [],
-        email: 'user3@test.com'
-    }
-]
-
-// bcrypt.hash('1234', saltRounds).then(pass => {
-//     console.log(pass)
-// })
-
-const idToUser = new Map(users.map(u => [u.id, u]))
-const steamIDToUser = new Map(users.map(u => [u.steamID, u]))
-const usernameToUser = new Map(users.map(u => [u.username, u]))
-
 const User = {
-    get: (id: string): Promise<User | undefined> => Promise.resolve(idToUser.get(id)),
+    get: (id: string): Promise<User | undefined> =>
+        dbClient
+            .query(GET_USER_WITH_ID, {
+                id
+            })
+            .then(res => res.data.User),
+
+    getUsingUsername: (username: string): Promise<User | undefined> =>
+        dbClient
+            .query(GET_USER_WITH_USERNAME, {
+                username
+            })
+            .then(res => res.data.allUsers[0]),
+
     create: (username: string, password: string, email?: string): Promise<User> =>
         new Promise((resolve, reject) => {
-            const exists = usernameToUser.has(username)
-            if (exists) {
-                reject(new Error('username taken!'))
-            } else {
-                bcrypt.hash(password, saltRounds).then(pass => {
-                    // create new user
-                    resolve({
-                        id: '4',
-                        steamID: '14',
-                        username: 'username04',
-                        role: 'user',
-                        jwtEpoch: 'some_random_val_04',
-                        extraPerm: [],
-                        password: pass,
-                        email
-                    })
-                })
-            }
-        }),
-    getUsingUsernameAndPassword: (username: string, password: string): Promise<User> =>
-        new Promise((resolve, reject) => {
-            const user = usernameToUser.get(username)
-            if (user && user.password) {
-                bcrypt.compare(password, user.password).then(same => {
-                    if (same) {
-                        resolve(user)
-                    } else {
-                        reject(new Error('invalid credentials!'))
-                    }
-                })
-            } else {
-                reject(new Error('invalid credentials!'))
-            }
-        }),
-    getUsingSteamID: (steamID: string): Promise<User | undefined> => Promise.resolve(steamIDToUser.get(steamID)),
-    createUsingSteamID: (steamID: string, username: string, email?: string): Promise<User> =>
-        new Promise((resolve, reject) => {
-            const steamIDExists = steamIDToUser.has(steamID)
-            if (steamIDExists) {
-                reject(new Error('account already exists!'))
-            } else {
-                const exists = usernameToUser.has(username)
-                if (exists) {
+            User.getUsingUsername(username).then(existingUser => {
+                if (existingUser) {
                     reject(new Error('username taken!'))
                 } else {
-                    // create new user
-                    resolve({
-                        id: '4',
-                        steamID,
-                        username,
-                        role: 'user',
-                        jwtEpoch: 'some_random_val_04',
-                        extraPerm: [],
-                        email
+                    Promise.all([bcrypt.hash(password, saltRounds), JWK.generate('oct')]).then(([pass, jwtEpoch]) =>
+                        // create new user
+                        dbClient
+                            .mutate(CREATE_USER_WITH_PASSWORD, {
+                                username,
+                                password: pass,
+                                email,
+                                jwtEpoch: jwtEpoch.k
+                            })
+                            .then(res => {
+                                resolve(res.data.createUser as User)
+                            })
+                    )
+                }
+            })
+        }),
+
+    getUsingUsernameAndPassword: (username: string, password: string): Promise<User> =>
+        new Promise((resolve, reject) => {
+            User.getUsingUsername(username).then(user => {
+                if (user && user.password) {
+                    bcrypt.compare(password, user.password).then(same => {
+                        if (same) {
+                            resolve(user)
+                        } else {
+                            reject(new Error('invalid credentials!'))
+                        }
+                    })
+                } else {
+                    reject(new Error('invalid credentials!'))
+                }
+            })
+        }),
+
+    getUsingSteamID: (steamID: string): Promise<User | undefined> =>
+        dbClient
+            .query(GET_USER_WITH_STEAMID, {
+                steamID
+            })
+            .then(res => res.data.allUsers[0]),
+
+    createUsingSteamID: (steamID: string, username: string, email?: string): Promise<User> =>
+        new Promise((resolve, reject) => {
+            User.getUsingSteamID(steamID).then(existingUser => {
+                if (existingUser) {
+                    reject(new Error('account already exists!'))
+                } else {
+                    User.getUsingUsername(username).then(existingUser => {
+                        if (existingUser) {
+                            reject(new Error('username taken!'))
+                        } else {
+                            // create new user
+                            dbClient
+                                .mutate(CREATE_USER_WITH_STEAMID, {
+                                    username,
+                                    steamID,
+                                    email,
+                                    jwtEpoch: JWK.generateSync('oct').k
+                                })
+                                .then(res => {
+                                    resolve(res.data.createUser as User)
+                                })
+                        }
                     })
                 }
-            }
+            })
         })
 }
 

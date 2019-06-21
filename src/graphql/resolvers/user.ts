@@ -3,7 +3,7 @@ import { Request, Response } from 'express'
 import { default as UserModel } from '../../models/user'
 import { setAuthCookie, clearAuthCookie } from '../../auth/middleware'
 import { issueNewToken } from '../../auth/jwt'
-import { getSteamID } from '../../auth/steam'
+import { getSteamID, clearSteamIDCookie } from '../../auth/steam'
 
 @ObjectType()
 class User {
@@ -19,7 +19,7 @@ class User {
     // @Field({ nullable: true })
     public password?: string
 
-    // @Field({ nullable: true })
+    @Field({ nullable: true })
     public email?: string
 
     @Field()
@@ -36,7 +36,11 @@ class User {
 class UserResolver {
     @Query(() => User)
     public me(@Ctx('user') user: User) {
-        return UserModel.get(user.id)
+        if (user) {
+            return UserModel.get(user.id)
+        } else {
+            return new Error('log in first')
+        }
     }
 
     @Mutation(() => User)
@@ -45,7 +49,7 @@ class UserResolver {
         @Ctx('res') res: Response,
         @Arg('username') username: string,
         @Arg('password') password: string,
-        @Arg('email') email?: string
+        @Arg('email', { nullable: true }) email?: string
     ) {
         if (user) {
             return new Error('already logged in')
@@ -64,13 +68,15 @@ class UserResolver {
         @Ctx('res') res: Response,
         @Ctx('req') req: Request,
         @Arg('username') username: string,
-        @Arg('email') email?: string
+        @Arg('email', { nullable: true }) email?: string
     ) {
         if (user) {
             return new Error('already logged in')
         } else {
             return getSteamID(req, res).then(steamID =>
                 UserModel.createUsingSteamID(steamID, username, email).then(user => {
+                    clearSteamIDCookie(res)
+
                     const token = issueNewToken(user)
                     setAuthCookie(res, token)
                     return user

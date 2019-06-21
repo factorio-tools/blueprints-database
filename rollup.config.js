@@ -9,6 +9,7 @@ import replace from 'rollup-plugin-replace'
 import svelte from 'rollup-plugin-svelte'
 import { terser } from 'rollup-plugin-terser'
 import typescript from 'rollup-plugin-typescript2'
+import { string } from 'rollup-plugin-string'
 const svelteConfig = require('./svelte.config')
 
 const mode = process.env.NODE_ENV
@@ -69,6 +70,9 @@ export default {
             graphql(),
             typescript({
                 check: false
+            }),
+            string({
+                include: '**/*.graphqls'
             })
         ],
         external: Object.keys(pkg.dependencies).concat(

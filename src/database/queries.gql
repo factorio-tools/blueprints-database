@@ -1,0 +1,70 @@
+fragment UserData on User {
+    id
+    steamID
+    username
+    password
+    email
+    role
+    extraPerm
+    jwtEpoch
+}
+
+query GET_USER_WITH_ID($id: String!) {
+    User(id: $id) {
+        ...UserData
+    }
+}
+
+query GET_USER_WITH_USERNAME($username: String!) {
+    allUsers(filter: { username: $username }, first: 1) {
+        ...UserData
+    }
+}
+
+query GET_USER_WITH_STEAMID($steamID: String!) {
+    allUsers(filter: { steamID: $steamID }, first: 1) {
+        ...UserData
+    }
+}
+
+mutation CREATE_USER_WITH_PASSWORD(
+    $username: String!
+    $password: String!
+    $email: String
+    $role: String = "user"
+    $jwtEpoch: String!
+) {
+    createUser(
+        input: {
+            username: $username
+            password: $password
+            email: $email
+            role: $role
+            extraPerm: []
+            jwtEpoch: $jwtEpoch
+        }
+    ) {
+        ...UserData
+    }
+}
+
+mutation CREATE_USER_WITH_STEAMID(
+    $username: String!
+    $steamID: String!
+    $email: String
+    $role: String = "user"
+    $jwtEpoch: String!
+) {
+    createUser(
+        input: {
+            username: $username
+            steamID: $steamID
+            email: $email
+            role: $role
+            extraPerm: []
+            jwtEpoch: $jwtEpoch
+        }
+    ) {
+        ...UserData
+    }
+}

@@ -12,10 +12,10 @@ const MAIN_DOMAIN = process.env.MAIN_DOMAIN || DOMAIN
 const SSL = process.env.SSL === 'true'
 const URL = `${SSL ? 'https://' : 'http://'}${DOMAIN}${IS_DEV_ENV ? `:${PORT}` : ''}`
 
-const DB_URL = process.env.DB_URL
-const DB_USERNAME = process.env.DB_USERNAME
-const DB_PASSWORD = process.env.DB_PASSWORD
-const DB_DATABASE = process.env.DB_DATABASE
+const DB_URL = process.env.DB_URL as string
+const DB_USERNAME = process.env.DB_USERNAME as string
+const DB_PASSWORD = process.env.DB_PASSWORD as string
+const DB_DATABASE = process.env.DB_DATABASE as string
 
 export default {
     NODE_ENV,
