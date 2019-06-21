@@ -1,7 +1,7 @@
 import fs from 'fs'
 import { JWT, JWK } from '@panva/jose'
-import constants from '../utils/constants'
-import util from '../utils/util'
+import constants from '~/utils/constants'
+import util from '~/utils/util'
 
 interface JWTPayload {
     role: string

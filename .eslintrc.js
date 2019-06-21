@@ -18,6 +18,10 @@ module.exports = {
         'import/resolver': {
             node: {
                 extensions: ['.js', '.ts', '.mjs']
+            },
+            alias: {
+                map: [['~', './src']],
+                extensions: ['.js', '.ts', '.mjs']
             }
         }
     },

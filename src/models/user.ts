@@ -1,13 +1,13 @@
 import bcrypt from 'bcrypt'
 import { JWK } from '@panva/jose'
-import { dbClient } from '../database/client'
+import { dbClient } from '~/database/client'
 import {
     GET_USER_WITH_ID,
     GET_USER_WITH_USERNAME,
     GET_USER_WITH_STEAMID,
     CREATE_USER_WITH_PASSWORD,
     CREATE_USER_WITH_STEAMID
-} from '../database/queries.gql'
+} from '~/database/queries.gql'
 
 const saltRounds = 10
 

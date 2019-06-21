@@ -1,9 +1,9 @@
 import { ObjectType, Field, ID, Resolver, Query, Mutation, Ctx, Arg, Args, Authorized } from 'type-graphql'
 import { Request, Response } from 'express'
-import { default as UserModel } from '../../models/user'
-import { setAuthCookie, clearAuthCookie } from '../../auth/middleware'
-import { issueNewToken } from '../../auth/jwt'
-import { getSteamID, clearSteamIDCookie } from '../../auth/steam'
+import { default as UserModel } from '~/models/user'
+import { setAuthCookie, clearAuthCookie } from '~/auth/middleware'
+import { issueNewToken } from '~/auth/jwt'
+import { getSteamID, clearSteamIDCookie } from '~/auth/steam'
 
 @ObjectType()
 class User {

@@ -1,7 +1,7 @@
 import { Response, RequestHandler } from 'express'
-import env from '../utils/env'
-import constants from '../utils/constants'
-import util from '../utils/util'
+import env from '~/utils/env'
+import constants from '~/utils/constants'
+import util from '~/utils/util'
 import { issueNewToken, verify } from './jwt'
 
 const getTokenStatus = (
