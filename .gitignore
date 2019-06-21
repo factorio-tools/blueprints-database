@@ -8,5 +8,4 @@ node_modules
 .rpt2_cache
 deploy
 deploy_key
-JWT_KEY
-STEAM_KEY
+keys

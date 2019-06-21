@@ -1,15 +1,10 @@
-import fs from 'fs'
 import { RelyingParty } from 'openid'
 import { Application, Response, RequestHandler, Request } from 'express'
-import { JWK, JWE } from '@panva/jose'
+import { JWE } from '@panva/jose'
 import { issueNewToken } from '~/auth/jwt'
 import { setAuthCookie } from '~/auth/middleware'
 import User from '~/models/user'
 import env from '~/utils/env'
-
-// generated with: JWK.generateSync('oct')
-// TODO: move in key db
-const STEAM_ID_COOKIE_KEY = JWK.importKey(fs.readFileSync('STEAM_KEY')) as JWK.OctKey
 
 interface Options {
     app: Application
@@ -33,7 +28,7 @@ const cb = (steamID: string, res: Response) => {
             setAuthCookie(res, token)
             res.redirect('/')
         } else {
-            res.cookie(env.STEAM_ID_COOKIE_NAME, JWE.encrypt(steamID, STEAM_ID_COOKIE_KEY), {
+            res.cookie(env.STEAM_ID_COOKIE_NAME, JWE.encrypt(steamID, env.STEAMID_COOKIE_KEY), {
                 httpOnly: true,
                 secure: env.SSL,
                 sameSite: true
@@ -52,7 +47,7 @@ const getSteamID = (req: Request, res: Response): Promise<string> =>
         const cookie = req.cookies[env.STEAM_ID_COOKIE_NAME]
         if (cookie) {
             try {
-                const steamID = JWE.decrypt(cookie, STEAM_ID_COOKIE_KEY).toString()
+                const steamID = JWE.decrypt(cookie, env.STEAMID_COOKIE_KEY).toString()
                 resolve(steamID)
             } catch {
                 clearSteamIDCookie(res)

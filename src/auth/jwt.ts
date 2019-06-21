@@ -1,5 +1,4 @@
-import fs from 'fs'
-import { JWT, JWK } from '@panva/jose'
+import { JWT } from '@panva/jose'
 import env from '~/utils/env'
 import util from '~/utils/util'
 
@@ -16,11 +15,6 @@ interface JWTPayload {
     username: string
 }
 
-// TODO: move key in db
-const key = JWK.importKey(fs.readFileSync('JWT_KEY')) as JWK.RSAKey
-// Generate with:
-// JWK.generateSync('RSA').toPEM(true)
-
 const issueNewToken = (user: User, expSession?: number) => {
     const now = util.currentUnixTime()
     return JWT.sign(
@@ -32,7 +26,7 @@ const issueNewToken = (user: User, expSession?: number) => {
             expSession: expSession ? expSession : now + env.SESSION_LENGTH,
             exp: now + env.TOKEN_LIFESPAN
         },
-        key,
+        env.AUTH_TOKEN_KEY,
         {
             subject: user.id,
             audience: ['https://blueprints.factorio.tools'],
@@ -45,7 +39,7 @@ const issueNewToken = (user: User, expSession?: number) => {
 }
 
 const verify = (token: string) =>
-    JWT.verify(token, key, {
+    JWT.verify(token, env.AUTH_TOKEN_KEY, {
         audience: 'https://blueprints.factorio.tools',
         ignoreExp: true
     }) as JWTPayload
