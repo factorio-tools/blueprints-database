@@ -7,7 +7,6 @@ import { initGQLServer } from './graphql/server'
 import { initSteamAuth } from './auth/steam'
 import { attachUserToContext } from './auth/middleware'
 import env from './utils/env'
-import constants from './utils/constants'
 import User from './models/user'
 import { initDBClient } from './database/client'
 
@@ -31,7 +30,7 @@ initDBClient().then(() => {
             sirv('static', { dev: env.IS_DEV_ENV }),
             sapper.middleware({
                 session: req => ({
-                    authToken: req.cookies[constants.AUTH_TOKEN_NAME],
+                    authToken: req.cookies[env.AUTH_TOKEN_NAME],
                     user: req.user
                 })
             })

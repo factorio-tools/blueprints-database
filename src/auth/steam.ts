@@ -7,7 +7,6 @@ import { setAuthCookie } from '~/auth/middleware'
 import User from '~/models/user'
 import env from '~/utils/env'
 
-const STEAM_ID_COOKIE_NAME = 'steamID'
 // generated with: JWK.generateSync('oct')
 // TODO: move in key db
 const STEAM_ID_COOKIE_KEY = JWK.importKey(fs.readFileSync('STEAM_KEY')) as JWK.OctKey
@@ -20,7 +19,7 @@ interface Options {
 }
 
 const guard: RequestHandler = (req, res, next) => {
-    if (req.user || req.cookies[STEAM_ID_COOKIE_NAME]) {
+    if (req.user || req.cookies[env.STEAM_ID_COOKIE_NAME]) {
         res.redirect('/')
     } else {
         next()
@@ -34,7 +33,7 @@ const cb = (steamID: string, res: Response) => {
             setAuthCookie(res, token)
             res.redirect('/')
         } else {
-            res.cookie(STEAM_ID_COOKIE_NAME, JWE.encrypt(steamID, STEAM_ID_COOKIE_KEY), {
+            res.cookie(env.STEAM_ID_COOKIE_NAME, JWE.encrypt(steamID, STEAM_ID_COOKIE_KEY), {
                 httpOnly: true,
                 secure: env.SSL,
                 sameSite: true
@@ -45,12 +44,12 @@ const cb = (steamID: string, res: Response) => {
 }
 
 const clearSteamIDCookie = (res: Response) => {
-    res.clearCookie(STEAM_ID_COOKIE_NAME)
+    res.clearCookie(env.STEAM_ID_COOKIE_NAME)
 }
 
 const getSteamID = (req: Request, res: Response): Promise<string> =>
     new Promise((resolve, reject) => {
-        const cookie = req.cookies[STEAM_ID_COOKIE_NAME]
+        const cookie = req.cookies[env.STEAM_ID_COOKIE_NAME]
         if (cookie) {
             try {
                 const steamID = JWE.decrypt(cookie, STEAM_ID_COOKIE_KEY).toString()

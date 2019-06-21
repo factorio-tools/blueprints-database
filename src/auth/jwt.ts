@@ -1,6 +1,6 @@
 import fs from 'fs'
 import { JWT, JWK } from '@panva/jose'
-import constants from '~/utils/constants'
+import env from '~/utils/env'
 import util from '~/utils/util'
 
 interface JWTPayload {
@@ -29,8 +29,8 @@ const issueNewToken = (user: User, expSession?: number) => {
             perm: user.extraPerm,
             username: user.username,
             epoch: user.jwtEpoch,
-            expSession: expSession ? expSession : now + constants.SESSION_LENGTH,
-            exp: now + constants.TOKEN_LIFESPAN
+            expSession: expSession ? expSession : now + env.SESSION_LENGTH,
+            exp: now + env.TOKEN_LIFESPAN
         },
         key,
         {

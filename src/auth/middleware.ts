@@ -1,6 +1,5 @@
 import { Response, RequestHandler } from 'express'
 import env from '~/utils/env'
-import constants from '~/utils/constants'
 import util from '~/utils/util'
 import { issueNewToken, verify } from './jwt'
 
@@ -55,8 +54,8 @@ const getTokenStatus = (
         }
     })
 
-const setAuthCookie = (res: Response, token: string, expires = util.currentUnixTime() + constants.SESSION_LENGTH) => {
-    res.cookie(constants.AUTH_TOKEN_NAME, token, {
+const setAuthCookie = (res: Response, token: string, expires = util.currentUnixTime() + env.SESSION_LENGTH) => {
+    res.cookie(env.AUTH_TOKEN_NAME, token, {
         domain: env.MAIN_DOMAIN,
         httpOnly: true,
         secure: env.SSL,
@@ -67,7 +66,7 @@ const setAuthCookie = (res: Response, token: string, expires = util.currentUnixT
 }
 
 const clearAuthCookie = (res: Response) => {
-    res.clearCookie(constants.AUTH_TOKEN_NAME, {
+    res.clearCookie(env.AUTH_TOKEN_NAME, {
         domain: env.MAIN_DOMAIN,
         path: '/'
     })
@@ -79,7 +78,7 @@ const attachUserToContext = (getUserFromDB: (id: string) => Promise<User | undef
     next
 ) => {
     const token =
-        req.cookies[constants.AUTH_TOKEN_NAME] ||
+        req.cookies[env.AUTH_TOKEN_NAME] ||
         (req.headers.authorization ? req.headers.authorization.replace('Bearer ', '') : undefined)
 
     if (token) {
