@@ -4,7 +4,9 @@
         "dev": "sapper dev",
         "build": "sapper build",
         "export": "sapper export",
-        "start": "node --require dotenv/config __sapper__/build"
+        "start": "node --require dotenv/config __sapper__/build",
+        "gen:key-auth": "node our-cli gen-key rsa keys/AUTH_TOKEN_KEY",
+        "gen:key-steam": "node our-cli gen-key oct keys/STEAMID_COOKIE_KEY"
     },
     "dependencies": {
         "@panva/jose": "^1.2.0",
@@ -48,6 +50,7 @@
         "eslint-plugin-import": "^2.17.3",
         "eslint-plugin-prettier": "^3.1.0",
         "eslint-plugin-svelte3": "^1.2.3",
+        "fs-extra": "^8.0.1",
         "node-sass": "^4.12.0",
         "prettier": "1.17.1",
         "prettier-plugin-svelte": "^0.6.0",
@@ -61,6 +64,7 @@
         "rollup-plugin-svelte": "^5.0.3",
         "rollup-plugin-terser": "^5.0.0",
         "rollup-plugin-typescript2": "^0.21.2",
+        "sade": "^1.5.1",
         "sapper": "^0.27.1",
         "stylus": "^0.54.5",
         "sucrase": "^3.10.1",

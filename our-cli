@@ -1,0 +1,34 @@
+#!/usr/bin/env node
+
+const fse = require('fs-extra')
+const sade = require('sade')
+const JWK = require('@panva/jose').JWK
+
+const prog = sade('our-cli')
+
+prog.command('gen-key <type> <dest>').action((type, dest) => {
+    const printSuccessMsg = () => {
+        console.log(`SUCCESS! ${type} key generated at ${dest}`)
+    }
+
+    switch (type) {
+        case 'rsa':
+            JWK.generate('RSA')
+                .then(key => fse.outputFile(dest, key.toPEM(true)))
+                .then(printSuccessMsg)
+
+            break
+
+        case 'oct':
+            JWK.generate('oct')
+                .then(key => fse.outputFile(dest, key.k))
+                .then(printSuccessMsg)
+
+            break
+
+        default:
+            throw new Error('Type not supported!')
+    }
+})
+
+prog.parse(process.argv)
