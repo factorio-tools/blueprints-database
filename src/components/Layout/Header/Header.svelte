@@ -1,7 +1,5 @@
 <script>
-    import Button from '../Button/Button.svelte'
-    import { client } from '~/graphql/client'
-    import { restore, query } from 'svelte-apollo'
+    import Button from '~/components/Layout/Button/Button.svelte'
     import { userStore } from '~/stores'
     export let segment
 </script>
@@ -37,7 +35,7 @@
         font-size: 34px;
         margin: 0 40px;
     }
-    nav > :global(a) {
+    nav > :global(button) {
         margin-left: 15px;
     }
 </style>
@@ -53,8 +51,8 @@
     </div>
     <nav>
         <Button text="ADD BLUEPRINT" href="/blueprint/add" icon="plus" color="yellow" />
-        <Button text={$userStore.username || 'Login'} onClick={userStore.login} href="#" icon="user-astronaut" />
-        <Button text="Logout" onClick={userStore.logout} href="#" icon="user-astronaut" />
+        <Button text={$userStore.username || 'Login'} onClick={userStore.login} icon="user-astronaut" />
+        <Button text="Logout" onClick={userStore.logout} icon="user-astronaut" />
     </nav>
 </header>
 

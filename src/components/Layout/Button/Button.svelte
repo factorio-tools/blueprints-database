@@ -1,15 +1,29 @@
 <script>
+    import * as sapper from '@sapper/app'
+
     export let text = '',
-        href = '#',
-        onClick,
+        href = undefined,
+        onClick = undefined,
         icon,
         color = '',
         size = '',
+        type = 'button',
         faPrefix = 'fas'
+
+    function handleClick(e) {
+        if (typeof onClick === 'function') {
+            onClick()
+        }
+        if (href) {
+            sapper.goto(href)
+        }
+    }
 </script>
 
 <style lang="scss">
-    a {
+    button {
+        cursor: pointer;
+        background: none;
         padding: 10px 18px 10px 18px;
         font-size: 19px;
         font-weight: 400;
@@ -18,16 +32,17 @@
 
         color: #ffffff;
         border: 1px solid rgba(255, 255, 255, 0.2);
+        display: inline-block;
     }
 
-    a:hover {
+    button:hover {
         opacity: 0.9;
     }
 
-    a.yellow,
-    a.yellow i,
-    a.yellow span {
-        border: none;
+    button.yellow,
+    button.yellow i,
+    button.yellow span {
+        border-color: #ffc73f;
         background: #ffc73f;
         color: #3d3116;
     }
@@ -42,9 +57,9 @@
     }
 </style>
 
-<a on:click={onClick} class="{color} {size}" {href}>
+<button on:click={e => handleClick(e)} class="{color} {size}" {type}>
     {#if icon}
         <i class="{faPrefix} fa-{icon}" />
     {/if}
     <span>{text}</span>
-</a>
+</button>

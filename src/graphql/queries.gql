@@ -34,6 +34,7 @@ mutation USER_LOGOUT {
 mutation USER_LOGIN($username: String!, $password: String!) {
     login(username: $username, password: $password) {
         username
+        displayname
         id
         role
         extraPerm

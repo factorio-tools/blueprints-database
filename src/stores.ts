@@ -50,19 +50,19 @@ function createUserStore() {
                 console.log(error)
             }
         },
-        login: async () => {
+        login: async (username: string, password: string) => {
             try {
                 const user = await mutate(client, {
                     mutation: USER_LOGIN,
-                    variables: { username: 'username00', password: '1234' }
+                    variables: { username, password }
                 })
                 if (user.errors) {
-                    console.log(user.errors)
+                    console.log(user.errors, 'user')
                 } else {
                     set({ ...user.data.login })
                 }
             } catch (error) {
-                console.log(error)
+                console.log(error, 'catch')
             }
         },
         setState: (newState: UserProps) => set({ ...newState }),
