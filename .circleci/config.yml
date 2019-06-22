@@ -1,6 +1,6 @@
 version: 2
 jobs:
-    build-and-deploy:
+    build:
         docker:
             - image: circleci/node:12.4.0
         working_directory: ~/blueprints-database
