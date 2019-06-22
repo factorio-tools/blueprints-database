@@ -2,7 +2,7 @@
     "private": true,
     "scripts": {
         "dev": "env-cmd sapper dev",
-        "build": "env-cmd sapper build",
+        "build": "sapper build",
         "start": "env-cmd node __sapper__/build",
         "gen:key-auth": "node our-cli gen-key rsa keys/AUTH_TOKEN_KEY",
         "gen:key-steam": "node our-cli gen-key oct keys/STEAMID_COOKIE_KEY"
