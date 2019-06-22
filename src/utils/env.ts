@@ -4,10 +4,6 @@ import { JWK } from '@panva/jose'
 const NODE_ENV = process.env.NODE_ENV as 'development' | 'production'
 const IS_DEV_ENV = NODE_ENV === 'development'
 
-if (IS_DEV_ENV) {
-    require('dotenv').config()
-}
-
 const PORT = process.env.PORT
 
 const DOMAIN = process.env.DOMAIN || 'localhost'

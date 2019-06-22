@@ -1,10 +1,9 @@
 {
     "private": true,
     "scripts": {
-        "dev": "sapper dev",
-        "build": "sapper build",
-        "export": "sapper export",
-        "start": "node --require dotenv/config __sapper__/build",
+        "dev": "env-cmd sapper dev",
+        "build": "env-cmd sapper build",
+        "start": "env-cmd node __sapper__/build",
         "gen:key-auth": "node our-cli gen-key rsa keys/AUTH_TOKEN_KEY",
         "gen:key-steam": "node our-cli gen-key oct keys/STEAMID_COOKIE_KEY"
     },
@@ -18,7 +17,7 @@
         "compression": "^1.7.4",
         "cookie-parser": "^1.4.4",
         "cruddl": "^0.8.1",
-        "dotenv": "^8.0.0",
+        "env-cmd": "^9.0.3",
         "express": "^4.17.1",
         "graphql": "^14.3.1",
         "graphql-tools": "^4.0.4",
@@ -35,7 +34,6 @@
         "@types/bcrypt": "^3.0.0",
         "@types/compression": "0.0.36",
         "@types/cookie-parser": "^1.4.1",
-        "@types/dotenv": "^6.1.1",
         "@types/express": "^4.16.1",
         "@types/graphql": "^14.2.1",
         "@types/node": "^12.0.8",

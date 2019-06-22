@@ -1,8 +1,15 @@
 <script>
+    import { stores } from '@sapper/app'
+    const { session } = stores()
+
+    let devEnv = false
+
+    session.subscribe(value => {
+        devEnv = value.devEnv
+    })
+
     export let status
     export let error
-
-    const dev = process.env.NODE_ENV === 'development'
 </script>
 
 <style>
@@ -36,6 +43,6 @@
 
 <p>{error.message}</p>
 
-{#if dev && error.stack}
+{#if devEnv && error.stack}
     <pre>{error.stack}</pre>
 {/if}

@@ -31,7 +31,8 @@ initDBClient().then(() => {
             sapper.middleware({
                 session: req => ({
                     authToken: req.cookies[env.AUTH_TOKEN_NAME],
-                    user: req.user
+                    user: req.user,
+                    devEnv: env.IS_DEV_ENV
                 })
             })
         )

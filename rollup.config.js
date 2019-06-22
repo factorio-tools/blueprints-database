@@ -12,8 +12,8 @@ import typescript from 'rollup-plugin-typescript2'
 import { string } from 'rollup-plugin-string'
 const svelteConfig = require('./svelte.config')
 
-const mode = process.env.NODE_ENV
-const dev = mode === 'development'
+// Detect if we are building the app
+const build = process.argv.includes('build')
 
 export default {
     client: {
@@ -21,11 +21,10 @@ export default {
         output: config.client.output(),
         plugins: [
             replace({
-                'process.browser': true,
-                'process.env.NODE_ENV': JSON.stringify(mode)
+                'process.browser': true
             }),
             svelte({
-                dev,
+                dev: !build,
                 hydratable: true,
                 emitCss: true,
                 ...svelteConfig
@@ -41,7 +40,7 @@ export default {
                 check: false
             }),
 
-            !dev &&
+            build &&
                 terser({
                     module: true
                 })
@@ -53,12 +52,11 @@ export default {
         output: config.server.output(),
         plugins: [
             replace({
-                'process.browser': false,
-                'process.env.NODE_ENV': JSON.stringify(mode)
+                'process.browser': false
             }),
             svelte({
                 generate: 'ssr',
-                dev,
+                dev: !build,
                 ...svelteConfig
             }),
             resolve({ extensions: ['.js', '.ts', '.mjs', '.json'] }),
@@ -85,19 +83,11 @@ export default {
         output: config.serviceworker.output(),
         plugins: [
             resolve(),
-            replace({
-                'process.browser': true,
-                'process.env.NODE_ENV': JSON.stringify(mode)
-            }),
             commonjs(),
-            alias({
-                resolve: ['.js', '.ts', '.gql', '.svelte'],
-                '~': path.join(__dirname, './src')
-            }),
             typescript({
                 check: false
             }),
-            !dev && terser()
+            build && terser()
         ]
     }
 }
