@@ -1,0 +1,41 @@
+version: 2
+jobs:
+    build-and-deploy:
+        docker:
+            - image: circleci/node:12.4.0
+        working_directory: ~/blueprints-database
+        steps:
+            # BUILD
+            - checkout
+            # Download and cache dependencies
+            - restore_cache:
+                  keys:
+                      - v1-dependencies-{{ checksum "package.json" }}
+                      # fallback to using the latest cache if no exact match is found
+                      - v1-dependencies-
+            - run: npm install
+            - save_cache:
+                  paths:
+                      - node_modules
+                  key: v1-dependencies-{{ checksum "package.json" }}
+            - run: npm run build
+
+            # DEPLOY
+            - run:
+                  name: Add SSH server public key to known_hosts
+                  command: |
+                      echo $REMOTE_HOSTKEY >> ~/.ssh/known_hosts
+            # add private SSH key from CircleCI account based on fingerprint
+            - add_ssh_keys:
+                  fingerprints:
+                      - '8f:36:4b:d0:e7:35:59:23:43:99:55:1c:90:0e:34:55'
+            - deploy:
+                  name: Deploy Over SSH using rsync
+                  command: |
+                      if [ "${CIRCLE_BRANCH}" = "master" ]; then
+                        rsync -avzhc --include-from=.circleci/.circleinclude --exclude="*" -e ssh $SSH_USER@$SSH_HOST:$APP_PATH .
+                      elif [ $TRAVIS_BRANCH == "staging" ]; then
+                        rsync -avzhc --include-from=.circleci/.circleinclude --exclude="*" -e ssh $SSH_USER@$SSH_HOST:$APP_PATH_STAGING .
+                      else
+                        echo "No deploy script for branch '${CIRCLE_BRANCH}'"
+                      fi

@@ -1,0 +1,7 @@
+# example patterns for rsync: https://stackoverflow.com/a/48010623
+
+__sapper__/***
+static/***
+our-cli
+package.json
+package-lock.json
