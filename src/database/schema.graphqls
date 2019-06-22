@@ -6,7 +6,7 @@ type User @rootEntity {
     jwtEpoch: String!
     extraPerm: [String!]!
     password: String
-    email: String
+    email: String @unique
 }
 
 # type Movie @rootEntity {

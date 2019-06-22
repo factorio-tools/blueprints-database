@@ -22,6 +22,12 @@ query GET_USER_WITH_USERNAME($username: String!) {
     }
 }
 
+query GET_USER_WITH_EMAIL($email: String!) {
+    allUsers(filter: { email: $email }, first: 1) {
+        ...UserData
+    }
+}
+
 query GET_USER_WITH_STEAMID($steamID: String!) {
     allUsers(filter: { steamID: $steamID }, first: 1) {
         ...UserData
@@ -62,7 +68,7 @@ mutation CREATE_USER_WITH_STEAMID(
     createUser(
         input: {
             username: $username
-            displayname: $username
+            displayname: $displayname
             steamID: $steamID
             email: $email
             role: $role

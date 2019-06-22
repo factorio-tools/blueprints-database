@@ -57,7 +57,7 @@ module.exports = {
         'no-console': 'off',
 
         // Best Practices (https://eslint.org/docs/rules/#best-practices)
-        curly: ['warn', 'all'],
+        curly: ['off', 'ignore-same-line'],
         'dot-notation': ['error', { allowPattern: '^[a-z]+(_[a-z]+)+$' }],
         eqeqeq: ['warn', 'always'],
         'guard-for-in': 'error',
@@ -70,7 +70,7 @@ module.exports = {
         'no-sequences': 'error',
         'no-throw-literal': 'error',
         'no-unmodified-loop-condition': 'error',
-        'no-unused-expressions': 'error',
+        'no-unused-expressions': ['error', { allowShortCircuit: true }],
         'no-useless-concat': 'error',
         'no-useless-return': 'error',
         'no-void': 'error',
