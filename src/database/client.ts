@@ -77,7 +77,12 @@ const initDBClient = () => {
     return db.updateSchema(project.getModel()).then(() => {
         const c = new ApolloClient({
             cache: new InMemoryCache(),
-            link: new SchemaLink({ schema: project.createSchema(db) })
+            link: new SchemaLink({ schema: project.createSchema(db) }),
+            defaultOptions: {
+                query: {
+                    fetchPolicy: 'no-cache'
+                }
+            }
         })
 
         dbClient = getCustomClient(c)
