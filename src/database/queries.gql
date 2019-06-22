@@ -2,6 +2,7 @@ fragment UserData on User {
     id
     steamID
     username
+    displayname
     password
     email
     role
@@ -29,6 +30,7 @@ query GET_USER_WITH_STEAMID($steamID: String!) {
 
 mutation CREATE_USER_WITH_PASSWORD(
     $username: String!
+    $displayname: String!
     $password: String!
     $email: String
     $role: String = "user"
@@ -37,6 +39,7 @@ mutation CREATE_USER_WITH_PASSWORD(
     createUser(
         input: {
             username: $username
+            displayname: $displayname
             password: $password
             email: $email
             role: $role
@@ -50,6 +53,7 @@ mutation CREATE_USER_WITH_PASSWORD(
 
 mutation CREATE_USER_WITH_STEAMID(
     $username: String!
+    $displayname: String!
     $steamID: String!
     $email: String
     $role: String = "user"
@@ -58,6 +62,7 @@ mutation CREATE_USER_WITH_STEAMID(
     createUser(
         input: {
             username: $username
+            displayname: $username
             steamID: $steamID
             email: $email
             role: $role

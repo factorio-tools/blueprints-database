@@ -13,6 +13,7 @@ interface JWTPayload {
     iat: number
     exp: number
     username: string
+    displayname: string
 }
 
 const issueNewToken = (user: User, expSession?: number) => {
@@ -22,6 +23,7 @@ const issueNewToken = (user: User, expSession?: number) => {
             role: user.role,
             perm: user.extraPerm,
             username: user.username,
+            displayname: user.displayname,
             epoch: user.jwtEpoch,
             expSession: expSession ? expSession : now + env.SESSION_LENGTH,
             exp: now + env.TOKEN_LIFESPAN

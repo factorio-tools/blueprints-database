@@ -16,6 +16,9 @@ class User {
     @Field()
     public username!: string
 
+    @Field()
+    public displayname!: string
+
     // @Field({ nullable: true })
     public password?: string
 
