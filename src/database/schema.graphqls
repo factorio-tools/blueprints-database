@@ -1,6 +1,7 @@
 type User @rootEntity {
     steamID: String @unique
     username: String! @unique
+    displayname: String! @unique
     role: String!
     jwtEpoch: String!
     extraPerm: [String!]!

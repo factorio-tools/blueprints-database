@@ -8,6 +8,7 @@ interface User {
     id: string
     steamID?: string
     username: string
+    displayname: string
     role: string
     jwtEpoch: string
     extraPerm: string[]
@@ -21,4 +22,5 @@ interface UserData {
     role: string
     extraPerm: string[]
     username: string
+    displayname: string
 }
