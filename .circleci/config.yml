@@ -34,7 +34,7 @@ jobs:
                   command: |
                       if [ "${CIRCLE_BRANCH}" = "master" ]; then
                         rsync -avzhc --include-from=.circleci/.circleinclude --exclude="*" -e ssh $SSH_USER@$SSH_HOST:$APP_PATH .
-                      elif [ $TRAVIS_BRANCH == "staging" ]; then
+                      elif [ "${CIRCLE_BRANCH}" = "staging" ]; then
                         rsync -avzhc --include-from=.circleci/.circleinclude --exclude="*" -e ssh $SSH_USER@$SSH_HOST:$APP_PATH_STAGING .
                       else
                         echo "No deploy script for branch '${CIRCLE_BRANCH}'"
