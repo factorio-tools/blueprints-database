@@ -15,7 +15,7 @@
 </script>
 
 <script>
-    import { fade } from 'svelte-transitions'
+    import { fly } from 'svelte-transitions'
     import { restore, query } from 'svelte-apollo'
     import Posts from '~/components/Posts/Posts.svelte'
     import { GET_FAVORITES } from '~/graphql/queries.gql'
@@ -33,7 +33,7 @@
     <title>Factorio Blueprint Database | Factorio Tools</title>
 </svelte:head>
 
-<div in:fade>
+<div in:fly={{ y: 20 }}>
     <h1>Test staging!</h1>
 
     <!-- Component example-->

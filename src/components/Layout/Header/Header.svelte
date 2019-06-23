@@ -62,7 +62,6 @@
                 <ul>
                     <li>My Library</li>
                     <li>My Favorites</li>
-                    <li>Settings</li>
                     <li on:click={() => userStore.logout()} class="sep">Logout</li>
                 </ul>
             </div>

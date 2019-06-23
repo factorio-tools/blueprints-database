@@ -3,7 +3,7 @@
     import { goto } from '~/utils/ui-utils.ts'
     import StatItem from './parts/StatItem.svelte'
 
-    export let title, username
+    export let title, displayname
 </script>
 
 <style lang="scss">
@@ -52,7 +52,7 @@
         <StatItem text="457" icon="arrow-alt-circle-down" color="#86abc6" />
         <StatItem
             onClick={goto('/blog')}
-            text={username}
+            text={displayname}
             icon="user-astronaut"
             faPrefix="fas"
             color="#a0c488"
