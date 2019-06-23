@@ -5,7 +5,6 @@
 
     export async function preload(page, session) {
         let user = {}
-
         userStore.subscribe(value => {
             user = value
         })()
@@ -13,11 +12,16 @@
         if (user.username) {
             return this.redirect(302, `/`)
         }
+
+        let redirect = page.query.redirect || undefined
+        return { redirect }
     }
 </script>
 
 <script>
     import Button from '~/components/Layout/Button/Button.svelte'
+    export let redirect
+
     let form
     let username = ''
     let password = ''
@@ -37,7 +41,7 @@
             return
         }
 
-        const login = await userStore.login(username, password)
+        const login = await userStore.login(username, password, redirect)
     }
 </script>
 

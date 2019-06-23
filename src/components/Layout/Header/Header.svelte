@@ -51,7 +51,21 @@
     </div>
     <nav>
         <Button text="ADD BLUEPRINT" href="/blueprint/add" icon="plus" color="yellow" />
-        <Button text={$userStore.username || 'Login'} href="/user/login" icon="user-astronaut" />
+        <Button
+            text={$userStore.displayname || 'Login'}
+            href={!$userStore.displayname && '/user/login'}
+            icon="user-astronaut"
+            nav={$userStore.displayname && true}>
+
+            <div class="buttonNav" slot="nav">
+                <ul>
+                    <li>My Library</li>
+                    <li>My Favorites</li>
+                    <li>Settings</li>
+                    <li on:click={() => userStore.logout()} class="sep">Logout</li>
+                </ul>
+            </div>
+        </Button>
     </nav>
 </header>
 

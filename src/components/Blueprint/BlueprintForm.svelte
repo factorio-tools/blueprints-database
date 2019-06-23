@@ -1,4 +1,5 @@
 <script>
+    import { fly } from 'svelte-transitions'
     import { blueprintPreviewStore as bppStore } from '~/stores'
 
     const handleChange = e => {
@@ -10,7 +11,7 @@
     @import 'components/styles/form.scss';
 </style>
 
-<form autocomplete="off">
+<form in:fly={{ y: 80 }} autocomplete="off">
     <header>
         <h2>ADD BLUEPRINT</h2>
     </header>

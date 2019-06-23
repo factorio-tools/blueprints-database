@@ -1,4 +1,5 @@
 <script>
+    import { fly } from 'svelte-transitions'
     import { goto } from '~/utils/ui-utils.ts'
     import StatItem from './parts/StatItem.svelte'
 
@@ -42,7 +43,7 @@
     }
 </style>
 
-<article>
+<article in:fly={{ y: 40 }}>
     <header>
         <h3>{title}</h3>
     </header>

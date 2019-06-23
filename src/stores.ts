@@ -1,3 +1,4 @@
+import * as sapper from '@sapper/app'
 import { query, mutate } from 'svelte-apollo'
 import { writable } from 'svelte/store'
 import { client } from './graphql/client'
@@ -9,6 +10,7 @@ interface CreateBlueprintPreviewProps {
 
 interface UserProps {
     username: string
+    displayname: string
     id: string
     role: string
     perm: string[]
@@ -31,6 +33,7 @@ function createBlueprintPreviewStore() {
 function createUserStore() {
     const defaultProps: UserProps = {
         username: '',
+        displayname: '',
         id: '',
         role: '',
         perm: []
@@ -40,27 +43,27 @@ function createUserStore() {
     return {
         subscribe,
         defaultProps,
-        logout: async () => {
+        logout: async (callback?: Function) => {
             try {
                 await mutate(client, {
                     mutation: USER_LOGOUT
                 })
                 set({ ...defaultProps })
+                if (callback) callback()
+                else sapper.goto('/')
             } catch (error) {
                 console.log(error)
             }
         },
-        login: async (username: string, password: string) => {
+        login: async (username: string, password: string, redirect: string = '/') => {
             try {
                 const user = await mutate(client, {
                     mutation: USER_LOGIN,
                     variables: { username, password }
                 })
-                if (user.errors) {
-                    console.log(user.errors, 'user')
-                } else {
-                    set({ ...user.data.login })
-                }
+                if (user.errors) console.log(user.errors, 'user')
+                else set({ ...user.data.login })
+                sapper.goto(redirect)
             } catch (error) {
                 console.log(error, 'catch')
             }

@@ -9,7 +9,7 @@
         })()
 
         if (!user.username) {
-            return this.redirect(302, `/?redirect=${page.path}`)
+            return this.redirect(302, `/user/login/?redirect=${page.path}`)
         }
     }
 </script>
