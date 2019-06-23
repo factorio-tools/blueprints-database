@@ -14,26 +14,24 @@ interface Options {
 }
 
 const guard: RequestHandler = (req, res, next) => {
-    if (req.user || req.cookies[env.STEAM_ID_COOKIE_NAME]) {
-        res.redirect('/')
-    } else {
-        next()
-    }
+    // if (req.user || req.cookies[env.STEAM_ID_COOKIE_NAME]) res.redirect('/')
+    if (req.user) res.redirect('/')
+    else next()
 }
 
-const cb = (steamID: string, res: Response) => {
+const cb = (steamID: string, res: Response, redirect: string = '/') => {
     User.getUsingSteamID(steamID).then(user => {
         if (user) {
             const token = issueNewToken(user)
             setAuthCookie(res, token)
-            res.redirect('/')
+            res.redirect(redirect)
         } else {
             res.cookie(env.STEAM_ID_COOKIE_NAME, JWE.encrypt(steamID, env.STEAMID_COOKIE_KEY), {
                 httpOnly: true,
                 secure: env.SSL,
                 sameSite: true
             })
-            res.redirect('/')
+            res.redirect(`/user/steam?redirect=${redirect}`)
         }
     })
 }
@@ -45,7 +43,7 @@ const clearSteamIDCookie = (res: Response) => {
 const getSteamID = (req: Request, res: Response): Promise<string> =>
     new Promise((resolve, reject) => {
         const cookie = req.cookies[env.STEAM_ID_COOKIE_NAME]
-        if (cookie) {
+        if (cookie)
             try {
                 const steamID = JWE.decrypt(cookie, env.STEAMID_COOKIE_KEY).toString()
                 resolve(steamID)
@@ -53,22 +51,24 @@ const getSteamID = (req: Request, res: Response): Promise<string> =>
                 clearSteamIDCookie(res)
                 reject(new Error('steamID not valid!'))
             }
-        } else {
-            reject(new Error('no steamID cookie provided!'))
-        }
+        else reject(new Error('no steamID cookie provided!'))
     })
 
 const initSteamAuth = (opts: Options) => {
-    const relyingParty = new RelyingParty(`${opts.baseURL}${opts.tempPath}`, opts.baseURL, true, true, [])
-
-    opts.app.get(opts.authPath, guard, (_, res, next) => {
+    opts.app.get(opts.authPath, guard, (req, res, next) => {
+        const redirect: string | undefined = req.query.redirect
+        const relyingParty = new RelyingParty(
+            `${opts.baseURL}${opts.tempPath}${redirect ? `?redirect=${redirect}` : ''}`,
+            opts.baseURL,
+            true,
+            true,
+            []
+        )
         relyingParty.authenticate('https://steamcommunity.com/openid', false, (err, authURL) => {
-            if (err) {
-                console.log(err)
-                return next(`Authentication failed: ${err}`)
-            }
+            if (err) return next(`Authentication failed: ${err}`)
 
             if (!authURL) {
+                console.log('TEST')
                 return next('Authentication failed.')
             }
 
@@ -77,22 +77,20 @@ const initSteamAuth = (opts: Options) => {
     })
 
     opts.app.get(opts.tempPath, guard, (req, res, next) => {
+        const redirect: string | undefined = req.query.redirect
+
+        const relyingParty = new RelyingParty(`${opts.baseURL}${opts.tempPath}`, opts.baseURL, true, true, [])
         relyingParty.verifyAssertion(req, (err, result) => {
-            if (err) {
-                return next(err.message)
-            }
+            if (err) return next(err.message)
 
-            if (!result || !result.authenticated) {
-                return next('Failed to authenticate user.')
-            }
+            if (!result || !result.authenticated) return next('Failed to authenticate user.')
 
-            if (!/^https?:\/\/steamcommunity\.com\/openid\/id\/\d+$/.test(result.claimedIdentifier)) {
+            if (!/^https?:\/\/steamcommunity\.com\/openid\/id\/\d+$/.test(result.claimedIdentifier))
                 return next('Claimed identity is not valid.')
-            }
 
             const steamID = result.claimedIdentifier.replace('https://steamcommunity.com/openid/id/', '')
 
-            cb(steamID, res)
+            cb(steamID, res, redirect)
         })
     })
 }

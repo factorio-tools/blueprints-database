@@ -40,3 +40,23 @@ mutation USER_LOGIN($username: String!, $password: String!) {
         extraPerm
     }
 }
+
+mutation USER_REGISTER_WITH_STEAM($username: String!, $email: String) {
+    registerWithSteam(username: $username, email: $email) {
+        username
+        displayname
+        id
+        role
+        extraPerm
+    }
+}
+
+mutation USER_REGISTER($username: String!, $password: String!, $email: String) {
+    register(username: $username, password: $password, email: $email) {
+        username
+        displayname
+        id
+        role
+        extraPerm
+    }
+}

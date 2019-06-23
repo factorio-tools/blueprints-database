@@ -3,10 +3,25 @@
     import { userStore } from '~/stores'
     import { validateEmail } from '~/utils/ui-utils.ts'
     import Error from '~/components/Layout/Form/Error'
+
+    export async function preload(page, session) {
+        let user = {}
+        userStore.subscribe(value => {
+            user = value
+        })()
+
+        if (user.username) {
+            return this.redirect(302, `/`)
+        }
+
+        let redirect = page.query.redirect || undefined
+        return { redirect }
+    }
 </script>
 
 <script>
     import Button from '~/components/Layout/Button/Button.svelte'
+    export let redirect
 
     let form
     let username = ''
@@ -33,7 +48,7 @@
             return
         }
 
-        // const register = await userStore.register(username, password, email)
+        const register = await userStore.register(username, password, email, redirect)
     }
 </script>
 

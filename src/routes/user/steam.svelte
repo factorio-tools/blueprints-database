@@ -1,6 +1,7 @@
 <script context="module">
-    import { userStore } from '~/stores'
     import { fly } from 'svelte-transitions'
+    import { userStore } from '~/stores'
+    import { validateEmail } from '~/utils/ui-utils.ts'
     import Error from '~/components/Layout/Form/Error'
 
     export async function preload(page, session) {
@@ -12,8 +13,8 @@
         if (user.username) {
             return this.redirect(302, `/`)
         }
-
         let redirect = page.query.redirect || undefined
+
         return { redirect }
     }
 </script>
@@ -24,11 +25,13 @@
 
     let form
     let username = ''
-    let password = ''
+    let email = ''
     let error = null
 
     function validateForm() {
-        if (username == '' || password == '') return 'Please ensure all fields are completed'
+        if (username == '') return 'Please pick a username'
+        if (username.length > 25) return 'Username cannot be longer than 25 characters'
+        if (email != '' && !validateEmail(email)) return 'Invalid email'
 
         return true
     }
@@ -41,7 +44,7 @@
             return
         }
 
-        const login = await userStore.login(username, password, redirect)
+        const register = await userStore.registerSteam(username, email, redirect)
     }
 </script>
 
@@ -62,42 +65,36 @@
         margin-bottom: 20px;
     }
 
-    .register {
-        padding: 18px 35px;
-        font-size: 14px;
-        opacity: 0.8;
+    p {
+        opacity: 0.7;
+        margin: 0;
+        margin-top: 6px;
+        font-size: 13px;
     }
 </style>
 
 <svelte:head>
-    <title>Login</title>
+    <title>Register with Steam</title>
 </svelte:head>
 
 <article in:fly={{ y: 20 }}>
     <div class="login">
-        <form on:submit|preventDefault={submit} bind:this={form} autocomplete="off">
+        <form on:submit|preventDefault={submit} bind:this={form}>
             <header>
-                <h2>LOGIN</h2>
+                <h2>COMPLETE STEAM REGISTRATION</h2>
+                <p>Upload blueprints and be notified of updates to your favorites!</p>
             </header>
             <div class="formWrapper">
                 {#if error}
-                    <Error message="Username already taken!" />
+                    <Error message={error} />
                 {/if}
-                <label style="display:none;">Login</label>
-                <input placeholder="Username" name="username" bind:value={username} />
-                <input placeholder="Password" type="password" name="password" bind:value={password} />
+                <label style="display:none;">Register</label>
+                <input placeholder="Pick a username" name="username" bind:value={username} />
+                <input placeholder="Email (optional)" type="email" name="email" bind:value={email} />
                 <div class="loginRow">
-                    <Button text="LOGIN" type="submit" icon="sign-in-alt" color="yellow" />
-                    <Button
-                        text="LOGIN WITH STEAM"
-                        href="/steamauth{redirect ? `?redirect=${redirect}` : ''}"
-                        faPrefix="fab"
-                        icon="steam" />
+                    <Button text="REGISTER" type="submit" icon="user-astronaut" color="yellow" />
                 </div>
             </div>
         </form>
-        <a class="register" href="/user/register{redirect ? `?redirect=${redirect}` : ''}">
-            Don't have an account? Register
-        </a>
     </div>
 </article>

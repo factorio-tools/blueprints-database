@@ -21,7 +21,8 @@
     img {
         width: 100%;
         max-width: 157px;
-        padding: 30px 45px 30px 0;
+        padding: 18px 45px 18px 0;
+        margin: 15px 0;
         border-right: 1px solid rgba(255, 255, 255, 0.2);
         box-sizing: content-box;
     }
@@ -68,17 +69,3 @@
         </Button>
     </nav>
 </header>
-
-<!-- <nav>
-    <ul>
-        <li>
-            <a class={segment === undefined ? 'selected' : ''} href=".">home</a>
-        </li>
-        <li>
-            <a class={segment === 'about' ? 'selected' : ''} href="about">about</a>
-        </li>
-        <li>
-            <a rel="prefetch" class={segment === 'blog' ? 'selected' : ''} href="blog">blog</a>
-        </li>
-    </ul>
-</nav> -->

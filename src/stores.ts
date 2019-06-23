@@ -2,7 +2,7 @@ import * as sapper from '@sapper/app'
 import { query, mutate } from 'svelte-apollo'
 import { writable } from 'svelte/store'
 import { client } from './graphql/client'
-import { USER_LOGIN, USER_LOGOUT } from './graphql/queries.gql'
+import { USER_LOGIN, USER_LOGOUT, USER_REGISTER_WITH_STEAM, USER_REGISTER } from './graphql/queries.gql'
 
 interface CreateBlueprintPreviewProps {
     title: string
@@ -61,11 +61,41 @@ function createUserStore() {
                     mutation: USER_LOGIN,
                     variables: { username, password }
                 })
+
                 if (user.errors) console.log(user.errors, 'user')
                 else set({ ...user.data.login })
                 sapper.goto(redirect)
             } catch (error) {
+                console.log(error.message.replace('GraphQL error: ', ''))
+            }
+        },
+        registerSteam: async (username: string, email: string, redirect: string = '/') => {
+            console.log(redirect)
+
+            try {
+                const user = await mutate(client, {
+                    mutation: USER_REGISTER_WITH_STEAM,
+                    variables: { username, email }
+                })
+
+                if (user.errors) console.log(user.errors, 'user')
+                else set({ ...user.data.registerWithSteam })
+                sapper.goto(redirect)
+            } catch (error) {
                 console.log(error, 'catch')
+            }
+        },
+        register: async (username: string, password: string, email: string, redirect: string = '/') => {
+            try {
+                const user = await mutate(client, {
+                    mutation: USER_REGISTER,
+                    variables: { username, password, email }
+                })
+                if (user.errors) console.log(user.errors, 'user')
+                else set({ ...user.data.register })
+                sapper.goto(redirect)
+            } catch (error) {
+                console.log(error.message.replace('GraphQL error: ', ''))
             }
         },
         setState: (newState: UserProps) => set({ ...newState }),
