@@ -34,11 +34,11 @@ jobs:
                   name: Deploy Over SSH using rsync
                   command: |
                       if [ "${CIRCLE_BRANCH}" = "master" ]; then
-                        rsync -aivzhc --include-from=.circleci/.circleinclude --exclude="*" -e ssh . $SSH_USER@$SSH_HOST:$APP_PATH
-                        ssh $SSH_USER@$SSH_HOST 'npm i --production && pm2 restart blueprints'
+                        rsync -avzhc --include-from=.circleci/.circleinclude --exclude="*" -e ssh . $SSH_USER@$SSH_HOST:$APP_PATH
+                        ssh $SSH_USER@$SSH_HOST 'npm i --production && pm2 restart blueprints' >/dev/null 2>&1
                       elif [ "${CIRCLE_BRANCH}" = "staging" ]; then
-                        rsync -aivzhc --include-from=.circleci/.circleinclude --exclude="*" -e ssh . $SSH_USER@$SSH_HOST:$APP_PATH_STAGING
-                        ssh $SSH_USER@$SSH_HOST 'npm i --production && pm2 restart staging-blueprints'
+                        rsync -avzhc --include-from=.circleci/.circleinclude --exclude="*" -e ssh . $SSH_USER@$SSH_HOST:$APP_PATH_STAGING
+                        ssh $SSH_USER@$SSH_HOST 'npm i --production && pm2 restart staging-blueprints' >/dev/null 2>&1
                       else
                         echo "No deploy script for branch '${CIRCLE_BRANCH}'"
                       fi
