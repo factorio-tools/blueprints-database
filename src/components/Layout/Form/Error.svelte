@@ -14,4 +14,4 @@
     }
 </style>
 
-<div in:fly={{ y: 20 }}>{message}</div>
+<div in:fly={{ y: -20 }}>{message}</div>

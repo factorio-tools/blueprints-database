@@ -80,12 +80,12 @@
                 <h2>LOGIN</h2>
             </header>
             <div class="formWrapper">
-                <label style="display:none;">Login</label>
-                <input placeholder="Username" name="username" bind:value={username} />
-                <input placeholder="Password" type="password" name="password" bind:value={password} />
                 {#if error}
                     <Error message="Username already taken!" />
                 {/if}
+                <label style="display:none;">Login</label>
+                <input placeholder="Username" name="username" bind:value={username} />
+                <input placeholder="Password" type="password" name="password" bind:value={password} />
                 <div class="loginRow">
                     <Button text="LOGIN" type="submit" icon="sign-in-alt" color="yellow" />
                     <Button text="LOGIN WITH STEAM" faPrefix="fab" icon="steam" />

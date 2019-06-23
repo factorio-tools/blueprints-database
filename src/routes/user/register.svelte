@@ -11,16 +11,16 @@
     let form
     let username = ''
     let password = ''
-    let password_confirm = ''
+    let confirm_password = ''
     let email = ''
     let error = null
 
     function validateForm() {
-        if (username == '' || email == '' || password == '' || password_confirm == '')
+        if (username == '' || email == '' || password == '' || confirm_password == '')
             return 'Please ensure all fields are completed'
         if (username.length > 25) return 'Username cannot be longer than 25 characters'
         if (!validateEmail(email)) return 'Invalid email'
-        if (password != password_confirm) return 'Passwords do not match'
+        if (password != confirm_password) return 'Passwords do not match'
 
         return true
     }
@@ -74,6 +74,9 @@
                 <p>Upload blueprints and be notified of updates to your favorites!</p>
             </header>
             <div class="formWrapper">
+                {#if error}
+                    <Error message={error} />
+                {/if}
                 <label style="display:none;">Register</label>
                 <input placeholder="Username" name="username" bind:value={username} />
                 <input placeholder="Email" type="email" name="email" bind:value={email} />
@@ -81,11 +84,8 @@
                 <input
                     placeholder="Confirm Password"
                     type="password"
-                    name="password_confirm"
-                    bind:value={password_confirm} />
-                {#if error}
-                    <Error message={error} />
-                {/if}
+                    name="confirm_password"
+                    bind:value={confirm_password} />
                 <div class="loginRow">
                     <Button text="REGISTER" type="submit" icon="user-astronaut" color="yellow" />
                 </div>
