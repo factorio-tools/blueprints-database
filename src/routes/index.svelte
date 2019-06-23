@@ -15,6 +15,7 @@
 </script>
 
 <script>
+    import { fade } from 'svelte-transitions'
     import { restore, query } from 'svelte-apollo'
     import Posts from '~/components/Posts/Posts.svelte'
     import { GET_FAVORITES } from '~/graphql/queries.gql'
@@ -32,24 +33,26 @@
     <title>Factorio Blueprint Database | Factorio Tools</title>
 </svelte:head>
 
-<h1>Test staging!</h1>
+<div in:fade>
+    <h1>Test staging!</h1>
 
-<!-- Component example-->
-<Posts />
+    <!-- Component example-->
+    <Posts />
 
-<!-- Inline example-->
-<h3>Favorites:</h3>
-<!-- Note $ sign needed here to correctly refresh this once promise resolves -->
-{#await $favorites}
-    Loading won't be shown if preloaded
-{:then result}
-    <ul>
-        {#each result.data.favorites as favorite}
-            <li>
-                <b>{favorite.title}</b>
-            </li>
-        {/each}
-    </ul>
-{:catch error}
-    <p>Error preloading favorites: {error}</p>
-{/await}
+    <!-- Inline example-->
+    <h3>Favorites:</h3>
+    <!-- Note $ sign needed here to correctly refresh this once promise resolves -->
+    {#await $favorites}
+        Loading won't be shown if preloaded
+    {:then result}
+        <ul>
+            {#each result.data.favorites as favorite}
+                <li>
+                    <b>{favorite.title}</b>
+                </li>
+            {/each}
+        </ul>
+    {:catch error}
+        <p>Error preloading favorites: {error}</p>
+    {/await}
+</div>

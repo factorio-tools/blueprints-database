@@ -51,8 +51,7 @@
     </div>
     <nav>
         <Button text="ADD BLUEPRINT" href="/blueprint/add" icon="plus" color="yellow" />
-        <Button text={$userStore.username || 'Login'} onClick={userStore.login} icon="user-astronaut" />
-        <Button text="Logout" onClick={userStore.logout} icon="user-astronaut" />
+        <Button text={$userStore.username || 'Login'} href="/user/login" icon="user-astronaut" />
     </nav>
 </header>
 

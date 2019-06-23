@@ -26,6 +26,7 @@
         "openid": "^2.0.6",
         "reflect-metadata": "^0.1.13",
         "sirv": "^0.4.2",
+        "svelte-transitions": "^1.2.0",
         "type-graphql": "^0.17.4"
     },
     "devDependencies": {
