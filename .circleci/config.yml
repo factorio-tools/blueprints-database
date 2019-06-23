@@ -29,15 +29,16 @@ jobs:
             - add_ssh_keys:
                   fingerprints:
                       - '8f:36:4b:d0:e7:35:59:23:43:99:55:1c:90:0e:34:55'
-            - run: sudo apt update
             - run: sudo apt install rsync
             - deploy:
                   name: Deploy Over SSH using rsync
                   command: |
                       if [ "${CIRCLE_BRANCH}" = "master" ]; then
-                        rsync -avzhc --include-from=.circleci/.circleinclude --exclude="*" -e ssh $SSH_USER@$SSH_HOST:$APP_PATH .
+                        rsync -aivzhc --include-from=.circleci/.circleinclude --exclude="*" -e ssh $SSH_USER@$SSH_HOST:$APP_PATH .
+                        ssh $SSH_USER@$SSH_HOST:$APP_PATH 'npm i --production && pm2 restart blueprints'
                       elif [ "${CIRCLE_BRANCH}" = "staging" ]; then
-                        rsync -avzhc --include-from=.circleci/.circleinclude --exclude="*" -e ssh $SSH_USER@$SSH_HOST:$APP_PATH_STAGING .
+                        rsync -aivzhc --include-from=.circleci/.circleinclude --exclude="*" -e ssh $SSH_USER@$SSH_HOST:$APP_PATH_STAGING .
+                        ssh $SSH_USER@$SSH_HOST:$APP_PATH_STAGING 'npm i --production && pm2 restart staging-blueprints'
                       else
                         echo "No deploy script for branch '${CIRCLE_BRANCH}'"
                       fi
