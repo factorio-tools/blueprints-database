@@ -1,4 +1,5 @@
 <script context="module">
+    import { fly } from 'svelte-transitions'
     import { userStore } from '~/stores'
     import { validateEmail } from '~/utils/ui-utils.ts'
     import Error from '~/components/Layout/Form/Error'
@@ -65,7 +66,7 @@
     <title>Register</title>
 </svelte:head>
 
-<article>
+<article in:fly={{ y: 20 }}>
     <div class="login">
         <form on:submit|preventDefault={submit} bind:this={form}>
             <header>

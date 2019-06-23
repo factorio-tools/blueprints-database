@@ -1,6 +1,6 @@
 <script context="module">
     import { userStore } from '~/stores'
-    import { fade } from 'svelte-transitions'
+    import { fly } from 'svelte-transitions'
     import Error from '~/components/Layout/Form/Error'
 
     export async function preload(page, session) {
@@ -69,7 +69,7 @@
     <title>Login</title>
 </svelte:head>
 
-<article in:fade>
+<article in:fly={{ y: 20 }}>
     <div class="login">
         <form on:submit|preventDefault={submit} bind:this={form} autocomplete="off">
             <header>
@@ -88,6 +88,6 @@
                 </div>
             </div>
         </form>
-        <a class="register" href="#">Don't have an account? Register</a>
+        <a class="register" href="/user/register">Don't have an account? Register</a>
     </div>
 </article>
