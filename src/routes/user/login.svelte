@@ -81,7 +81,7 @@
             </header>
             <div class="formWrapper">
                 {#if error}
-                    <Error message="Username already taken!" />
+                    <Error message={error} />
                 {/if}
                 <label style="display:none;">Login</label>
                 <input placeholder="Username" name="username" bind:value={username} />
