@@ -14,8 +14,8 @@ interface Options {
 }
 
 const guard: RequestHandler = (req, res, next) => {
-    // if (req.user || req.cookies[env.STEAM_ID_COOKIE_NAME]) res.redirect('/')
     if (req.user) res.redirect('/')
+    else if (req.cookies[env.STEAM_ID_COOKIE_NAME]) res.redirect('/user/steam')
     else next()
 }
 
