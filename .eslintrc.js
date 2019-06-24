@@ -57,7 +57,7 @@ module.exports = {
         'no-console': 'off',
 
         // Best Practices (https://eslint.org/docs/rules/#best-practices)
-        curly: ['error', 'multi', 'consistent'],
+        curly: ['error', 'multi-line', 'consistent'],
         'dot-notation': ['error', { allowPattern: '^[a-z]+(_[a-z]+)+$' }],
         eqeqeq: ['warn', 'always'],
         'guard-for-in': 'error',
