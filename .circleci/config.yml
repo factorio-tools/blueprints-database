@@ -35,10 +35,12 @@ jobs:
                   command: |
                       if [ "${CIRCLE_BRANCH}" = "master" ]; then
                         rsync -avzhc --include-from=.circleci/.circleinclude --exclude="*" -e ssh . $SSH_USER@$SSH_HOST:$APP_PATH
-                        ssh $SSH_USER@$SSH_HOST 'npm i --production && pm2 restart blueprints' >/dev/null 2>&1
+                        ssh $SSH_USER@$SSH_HOST "cd '${APP_PATH}' && npm i --production --silent"
+                        ssh $SSH_USER@$SSH_HOST "pm2 restart blueprints" >/dev/null 2>&1
                       elif [ "${CIRCLE_BRANCH}" = "staging" ]; then
                         rsync -avzhc --include-from=.circleci/.circleinclude --exclude="*" -e ssh . $SSH_USER@$SSH_HOST:$APP_PATH_STAGING
-                        ssh $SSH_USER@$SSH_HOST 'npm i --production && pm2 restart staging-blueprints' >/dev/null 2>&1
+                        ssh $SSH_USER@$SSH_HOST "cd '${APP_PATH_STAGING}' && npm i --production --silent"
+                        ssh $SSH_USER@$SSH_HOST "pm2 restart staging-blueprints" >/dev/null 2>&1
                       else
                         echo "No deploy script for branch '${CIRCLE_BRANCH}'"
                       fi
