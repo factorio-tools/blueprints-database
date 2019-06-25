@@ -2,6 +2,7 @@ import ApolloClient from 'apollo-client'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { createHttpLink } from 'apollo-link-http'
 import { GraphQLSchema } from 'graphql'
+import { SchemaLink } from 'apollo-link-schema'
 
 let client: ApolloClient<unknown>
 
@@ -23,10 +24,8 @@ if (process.browser) {
     })
 }
 
-const initSSRGQLClient = async (ssrGQLClientData: { schema: GraphQLSchema; context: GQLContext }) => {
+const initSSRGQLClient = (ssrGQLClientData: { schema: GraphQLSchema; context: GQLContext }) => {
     if (!process.browser) {
-        const { SchemaLink } = await import('apollo-link-schema')
-
         client = new ApolloClient({
             ssrMode: true,
             cache: new InMemoryCache(),
