@@ -1,18 +1,18 @@
 import { ApolloServer, PlaygroundConfig } from 'apollo-server-express'
 import { Application, Request, Response } from 'express'
 import { buildSchema } from 'type-graphql'
-import env from '~/utils/env'
 import { Validator } from 'class-validator/validation/Validator'
 import { getFromContainer } from 'class-validator/container'
 import { formatError } from './errors'
-import resolvers from './resolvers'
+import * as resolvers from './resolvers'
 import authChecker from './authCheker'
+import env from '~/utils/env'
 
 const validator = getFromContainer(Validator)
 
 const initGQLServer = (app: Application) =>
     buildSchema({
-        resolvers,
+        resolvers: Object.values(resolvers),
         authChecker,
         validate: true,
         validateOrRejectFn: validator.validateOrReject.bind(validator)

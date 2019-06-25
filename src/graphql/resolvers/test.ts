@@ -88,4 +88,4 @@ class FavoriteResolver {
     }
 }
 
-export default [PostResolver, FavoriteResolver]
+export { PostResolver, FavoriteResolver }
