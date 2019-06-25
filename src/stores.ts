@@ -1,8 +1,11 @@
 import * as sapper from '@sapper/app'
 import { query, mutate } from 'svelte-apollo'
 import { writable } from 'svelte/store'
+import { validate } from 'class-validator'
+import { GraphQLError } from 'graphql'
 import { client } from './graphql/client'
 import { USER_LOGIN, USER_LOGOUT, USER_REGISTER_WITH_STEAM, USER_REGISTER } from './graphql/queries.gql'
+import { LoginInput, RegisterInput, RegisterWithSteamInput } from './graphql/resolvers/userInputTypes'
 
 interface CreateBlueprintPreviewProps {
     title: string
@@ -40,65 +43,92 @@ function createUserStore() {
     }
     const { subscribe, set, update } = writable({ ...defaultProps })
 
+    const parseGQLErrors = (errors: readonly GraphQLError[]): string[] =>
+        errors.flatMap(e => {
+            if (e.extensions && e.extensions.code === 'ARRAY_OF_ERRORS') return e.message.split('\n')
+            else return e.message
+        })
+
+    // eslint-disable-next-line @typescript-eslint/ban-types
+    const getInputErrors = <T extends Object>(classType: new () => T, inputVars: Record<string, unknown>) => {
+        const input = Object.assign(new classType(), inputVars)
+        return validate(input).then(inputErrors => inputErrors.flatMap(e => Object.values(e.constraints)))
+    }
+
     return {
         subscribe,
         defaultProps,
-        logout: async (callback?: Function) => {
-            try {
-                await mutate(client, {
-                    mutation: USER_LOGOUT
-                })
-                set({ ...defaultProps })
-                if (callback) callback()
-                else sapper.goto('/')
-            } catch (error) {
-                console.log(error)
-            }
-        },
-        login: async (username: string, password: string, redirect: string = '/') => {
-            try {
-                const user = await mutate(client, {
-                    mutation: USER_LOGIN,
-                    variables: { username, password }
-                })
 
-                if (user.errors) console.log(user.errors, 'user')
-                else set({ ...user.data.login })
-                sapper.goto(redirect)
-            } catch (error) {
-                console.log(error.message.replace('GraphQL error: ', ''))
-            }
-        },
-        registerSteam: async (username: string, email: string, redirect: string = '/') => {
-            console.log(redirect)
+        logout: () =>
+            mutate(client, {
+                mutation: USER_LOGOUT
+            }).then(({ errors }) => {
+                if (errors) {
+                    throw parseGQLErrors(errors)
+                } else {
+                    set({ ...defaultProps })
+                    // TODO: check if current route should still be avalible
+                    // if not only then redirect to /
+                    sapper.goto('/')
+                }
+            }),
 
-            try {
-                const user = await mutate(client, {
-                    mutation: USER_REGISTER_WITH_STEAM,
-                    variables: { username, email }
-                })
+        login: async (username: string, password: string) => {
+            const inputVars = { username, password }
 
-                if (user.errors) console.log(user.errors, 'user')
-                else set({ ...user.data.registerWithSteam })
-                sapper.goto(redirect)
-            } catch (error) {
-                console.log(error, 'catch')
-            }
+            const inputErrors = await getInputErrors(LoginInput, inputVars)
+            if (inputErrors.length !== 0) throw inputErrors
+
+            return mutate(client, {
+                mutation: USER_LOGIN,
+                variables: inputVars
+            }).then(({ errors, data }) => {
+                if (errors) {
+                    throw parseGQLErrors(errors)
+                } else {
+                    set({ ...data.login })
+                }
+            })
         },
-        register: async (username: string, password: string, email: string, redirect: string = '/') => {
-            try {
-                const user = await mutate(client, {
-                    mutation: USER_REGISTER,
-                    variables: { username, password, email }
-                })
-                if (user.errors) console.log(user.errors, 'user')
-                else set({ ...user.data.register })
-                sapper.goto(redirect)
-            } catch (error) {
-                console.log(error.message.replace('GraphQL error: ', ''))
-            }
+
+        registerSteam: async (username: string, email: string) => {
+            const inputVars = { username, email }
+
+            const inputErrors = await getInputErrors(RegisterWithSteamInput, inputVars)
+            if (inputErrors.length !== 0) throw inputErrors
+
+            return mutate(client, {
+                mutation: USER_REGISTER_WITH_STEAM,
+                variables: inputVars
+            }).then(({ errors, data }) => {
+                if (errors) {
+                    throw parseGQLErrors(errors)
+                } else {
+                    set({ ...data.registerWithSteam })
+                }
+            })
         },
+
+        register: async (username: string, password: string, confirmPassword: string, email: string) => {
+            const inputVars = { username, password, confirmPassword, email }
+
+            const inputErrors = await getInputErrors(RegisterInput, inputVars)
+            if (inputErrors.length !== 0) throw inputErrors
+
+            return mutate(client, {
+                mutation: USER_REGISTER,
+                variables: inputVars
+            }).then(({ errors, data }) => {
+                if (errors) {
+                    throw parseGQLErrors(errors)
+                } else {
+                    set({ ...data.register })
+                }
+            })
+        },
+
         setState: (newState: UserProps) => set({ ...newState }),
+
         reset: () => set({ ...defaultProps })
     }
 }

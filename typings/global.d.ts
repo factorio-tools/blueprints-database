@@ -22,7 +22,7 @@ interface Cookies {
 
 declare namespace Express {
     export interface Request extends Express.Request {
-        user: UserData
+        user: PublicUserData
         cookies: Cookies
     }
 }

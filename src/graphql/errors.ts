@@ -23,6 +23,13 @@ class InternalServerError extends ApolloError {
     }
 }
 
+class ArrayOfErrors extends ApolloError {
+    public readonly name = 'ArrayOfErrors'
+    public constructor(messages: string[]) {
+        super(messages.join('\n'), 'ARRAY_OF_ERRORS')
+    }
+}
+
 /** Used for error masking and potentially logging */
 const formatError = (error: GraphQLError): GraphQLFormattedError => {
     // Don't give the specific errors to the client
@@ -33,5 +40,5 @@ const formatError = (error: GraphQLError): GraphQLFormattedError => {
     return error
 }
 
-export { AuthenticationError, AuthorizationError, InternalServerError, formatError }
+export { AuthenticationError, AuthorizationError, InternalServerError, ArrayOfErrors, formatError }
 // export { SyntaxError, ValidationError, ForbiddenError, UserInputError } from 'apollo-server-express'

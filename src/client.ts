@@ -1,3 +1,4 @@
+import 'reflect-metadata'
 import * as sapper from '@sapper/app'
 
 sapper.start({

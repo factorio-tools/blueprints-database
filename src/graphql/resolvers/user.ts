@@ -1,9 +1,23 @@
-import { ObjectType, Field, ID, Resolver, Query, Mutation, Ctx, Arg, Args, Authorized } from 'type-graphql'
-import { Request, Response } from 'express'
-import { default as UserModel } from '~/models/user'
+import {
+    ObjectType,
+    Field,
+    ID,
+    Resolver,
+    Query,
+    Mutation,
+    Ctx,
+    Arg,
+    Args,
+    Authorized,
+    InputType,
+    createMethodDecorator
+} from 'type-graphql'
+import UserModel from '~/models/user'
 import { setAuthCookie, clearAuthCookie } from '~/auth/middleware'
 import { issueNewToken } from '~/auth/jwt'
 import { getSteamID, clearSteamIDCookie } from '~/auth/steam'
+import { ArrayOfErrors } from '../errors'
+import { RegisterInput, RegisterWithSteamInput, LoginInput } from './userInputTypes'
 
 @ObjectType()
 class User {
@@ -35,116 +49,100 @@ class User {
     public jwtEpoch!: string
 }
 
+function BlockIfLoggedIn() {
+    return createMethodDecorator<GQLContext>(({ context: { user } }, next) => {
+        if (user) {
+            throw new Error('Already logged in!')
+        } else {
+            return next()
+        }
+    })
+}
+
+function BlockIfProvidedUserDataIsInUse() {
+    return createMethodDecorator<GQLContext>(({ args: { input } }, next) => {
+        const checkData = [
+            {
+                var: input.username,
+                fn: UserModel.getUsingUsername,
+                error: 'Username taken!'
+            },
+            {
+                var: input.steamID,
+                fn: UserModel.getUsingSteamID,
+                error: 'Steam account already registered!'
+            },
+            {
+                var: input.email,
+                fn: UserModel.getUsingEmail,
+                error: 'Email address taken!'
+            }
+        ]
+
+        return Promise.all(checkData.map(opts => (opts.var ? opts.fn(opts.var) : undefined))).then(users => {
+            const errors = users
+                .map((user, i) => (user ? checkData[i].error : undefined))
+                .filter(errMsg => !!errMsg) as string[]
+
+            if (errors.length === 0) {
+                return next()
+            } else {
+                throw new ArrayOfErrors(errors)
+            }
+        })
+    })
+}
+
 @Resolver(User)
 class UserResolver {
     @Query(() => User)
-    public me(@Ctx('user') user: User) {
-        if (user) {
-            return UserModel.get(user.id)
-        } else {
-            return new Error('log in first')
-        }
+    @Authorized()
+    public me(@Ctx() ctx: GQLContext) {
+        return UserModel.get(ctx.user.id)
     }
 
     @Mutation(() => User)
-    public register(
-        @Ctx('user') user: User,
-        @Ctx('res') res: Response,
-        @Arg('username') username: string,
-        @Arg('password') password: string,
-        @Arg('email', { nullable: true }) email?: string
-    ) {
-        if (user) {
-            return new Error('already logged in')
-        } else {
-            return UserModel.create(username, password, email).then(user => {
+    @BlockIfLoggedIn()
+    @BlockIfProvidedUserDataIsInUse()
+    public register(@Ctx() ctx: GQLContext, @Arg('input') input: RegisterInput) {
+        return UserModel.create(input.username, input.password, input.email).then(user => {
+            const token = issueNewToken(user)
+            setAuthCookie(ctx.res, token)
+            return user
+        })
+    }
+
+    @Mutation(() => User)
+    @BlockIfLoggedIn()
+    @BlockIfProvidedUserDataIsInUse()
+    public registerWithSteam(@Ctx() ctx: GQLContext, @Arg('input') input: RegisterWithSteamInput) {
+        return getSteamID(ctx.req, ctx.res).then(steamID =>
+            UserModel.createUsingSteamID(steamID, input.username, input.email).then(user => {
+                clearSteamIDCookie(ctx.res)
+
                 const token = issueNewToken(user)
-                setAuthCookie(res, token)
+                setAuthCookie(ctx.res, token)
                 return user
             })
-        }
+        )
     }
 
     @Mutation(() => User)
-    public registerWithSteam(
-        @Ctx('user') user: User,
-        @Ctx('res') res: Response,
-        @Ctx('req') req: Request,
-        @Arg('username') username: string,
-        @Arg('email', { nullable: true }) email?: string
-    ) {
-        if (user) {
-            return new Error('already logged in')
-        } else {
-            return getSteamID(req, res).then(steamID =>
-                UserModel.createUsingSteamID(steamID, username, email).then(user => {
-                    clearSteamIDCookie(res)
-
-                    const token = issueNewToken(user)
-                    setAuthCookie(res, token)
-                    return user
-                })
-            )
-        }
-    }
-
-    @Mutation(() => User)
-    public login(
-        @Ctx('user') user: User,
-        @Ctx('res') res: Response,
-        @Arg('username') username: string,
-        @Arg('password') password: string
-    ) {
-        if (user) {
-            return new Error('already logged in')
-        } else {
-            return UserModel.getUsingUsernameAndPassword(username, password).then(user => {
-                const token = issueNewToken(user)
-                setAuthCookie(res, token)
-                return user
-            })
-        }
+    @BlockIfLoggedIn()
+    public login(@Ctx() ctx: GQLContext, @Arg('input') input: LoginInput) {
+        return UserModel.getUsingUsernameAndPassword(input.username, input.password).then(user => {
+            const token = issueNewToken(user)
+            setAuthCookie(ctx.res, token)
+            return user
+        })
     }
 
     @Mutation(() => Boolean)
-    public logout(@Ctx('user') user: User, @Ctx('res') res: Response) {
-        if (user) {
-            clearAuthCookie(res)
-            return true
-        }
-        return new Error('not logged in')
+    @Authorized()
+    public logout(@Ctx() ctx: GQLContext) {
+        clearAuthCookie(ctx.res)
+        return true
     }
-
-    // @Query(() => User)
-    // public recipe(@Arg('id') id: string) {
-    //     const recipe = await UserModel.findById(id)
-    //     if (recipe === undefined) {
-    //         throw new RecipeNotFoundError(id)
-    //     }
-    //     return recipe
-    // }
-
-    // @Query(() => [User])
-    // public recipes(@Args() { skip, take }: RecipesArgs) {
-    //     return UserModel.findAll({ skip, take })
-    // }
-
-    // @Mutation(() => User)
-    // @Authorized()
-    // public addRecipe(@Arg('newRecipeData') newRecipeData: NewRecipeInput, @Ctx('user') user: User): Promise<Recipe> {
-    //     return UserModel.addNew({ data: newRecipeData, user })
-    // }
-
-    // @Mutation(() => Boolean)
-    // @Authorized(Roles.Admin)
-    // public async removeRecipe(@Arg('id') id: string) {
-    //     try {
-    //         await UserModel.removeById(id)
-    //         return true
-    //     } catch {
-    //         return false
-    //     }
-    // }
 }
 
-export { UserResolver }
+export { User, UserResolver }

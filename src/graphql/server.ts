@@ -1,39 +1,49 @@
-import 'reflect-metadata'
 import { ApolloServer, PlaygroundConfig } from 'apollo-server-express'
-import { Application } from 'express'
+import { Application, Request, Response } from 'express'
 import { buildSchema } from 'type-graphql'
 import env from '~/utils/env'
+import { Validator } from 'class-validator/validation/Validator'
+import { getFromContainer } from 'class-validator/container'
 import { formatError } from './errors'
 import resolvers from './resolvers'
 import authChecker from './authCheker'
 
+const validator = getFromContainer(Validator)
+
 const initGQLServer = (app: Application) =>
     buildSchema({
         resolvers,
-        authChecker
+        authChecker,
+        validate: true,
+        validateOrRejectFn: validator.validateOrReject.bind(validator)
         // authMode: 'null'
-    })
-        .then(schema => {
-            // eslint-disable-next-line @typescript-eslint/no-object-literal-type-assertion
-            const playgroundOpts = {
-                settings: {
-                    'request.credentials': 'include'
-                }
-            } as PlaygroundConfig
+    }).then(schema => {
+        // eslint-disable-next-line @typescript-eslint/no-object-literal-type-assertion
+        const playgroundOpts = {
+            settings: {
+                'request.credentials': 'include'
+            }
+        } as PlaygroundConfig
 
-            const server = new ApolloServer({
-                schema,
-                formatError,
-                context: ({ req, res }) => ({
-                    user: req.user,
-                    req,
-                    res
-                }),
-                playground: env.IS_DEV_ENV ? playgroundOpts : false
-            })
-
-            server.applyMiddleware({ app, path: '/graphql' })
+        const context = ({ req, res }: { req: Request; res: Response }): GQLContext => ({
+            user: req.user,
+            req,
+            res
         })
-        .catch(e => console.log(e))
+
+        const server = new ApolloServer({
+            schema,
+            formatError,
+            context,
+            playground: env.IS_DEV_ENV ? playgroundOpts : false
+        })
+
+        server.applyMiddleware({ app, path: '/graphql' })
+
+        return {
+            schema,
+            context
+        }
+    })
 
 export { initGQLServer }

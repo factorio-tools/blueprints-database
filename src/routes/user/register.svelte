@@ -1,7 +1,6 @@
 <script context="module">
     import { fly } from 'svelte-transitions'
     import { userStore } from '~/stores'
-    import { validateEmail } from '~/utils/ui-utils.ts'
     import Error from '~/components/Layout/Form/Error'
 
     export async function preload(page, session) {
@@ -20,35 +19,22 @@
 </script>
 
 <script>
+    import { goto } from '@sapper/app'
     import Button from '~/components/Layout/Button/Button.svelte'
     export let redirect
 
     let form
     let username = ''
     let password = ''
-    let confirm_password = ''
+    let confirmPassword = ''
     let email = ''
-    let error = null
+    let errors = []
 
-    function validateForm() {
-        if (username == '' || email == '' || password == '' || confirm_password == '')
-            return 'Please ensure all fields are completed'
-        if (username.length > 25) return 'Username cannot be longer than 25 characters'
-        if (!validateEmail(email)) return 'Invalid email'
-        if (password != confirm_password) return 'Passwords do not match'
-
-        return true
-    }
-
-    async function submit(event) {
-        error = null
-
-        if (validateForm() !== true) {
-            error = validateForm()
-            return
-        }
-
-        const register = await userStore.register(username, password, email, redirect)
+    function submit() {
+        userStore
+            .register(username, password, confirmPassword, email)
+            .then(() => goto(redirect || '/'))
+            .catch(e => (errors = e))
     }
 </script>
 
@@ -89,8 +75,10 @@
                 <p>Upload blueprints and be notified of updates to your favorites!</p>
             </header>
             <div class="formWrapper">
-                {#if error}
-                    <Error message={error} />
+                {#if errors.length !== 0}
+                    {#each errors as error}
+                        <Error message={error} />
+                    {/each}
                 {/if}
                 <label style="display:none;">Register</label>
                 <input placeholder="Username" name="username" bind:value={username} />
@@ -99,8 +87,8 @@
                 <input
                     placeholder="Confirm Password"
                     type="password"
-                    name="confirm_password"
-                    bind:value={confirm_password} />
+                    name="confirmPassword"
+                    bind:value={confirmPassword} />
                 <div class="loginRow">
                     <Button text="REGISTER" type="submit" icon="user-astronaut" color="yellow" />
                 </div>

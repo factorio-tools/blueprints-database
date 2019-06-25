@@ -1,7 +1,6 @@
 <script context="module">
     import { fly } from 'svelte-transitions'
     import { userStore } from '~/stores'
-    import { validateEmail } from '~/utils/ui-utils.ts'
     import Error from '~/components/Layout/Form/Error'
 
     export async function preload(page, session) {
@@ -26,25 +25,13 @@
     let form
     let username = ''
     let email = ''
-    let error = null
+    let errors = []
 
-    function validateForm() {
-        if (username == '') return 'Please pick a username'
-        if (username.length > 25) return 'Username cannot be longer than 25 characters'
-        if (email != '' && !validateEmail(email)) return 'Invalid email'
-
-        return true
-    }
-
-    async function submit(event) {
-        error = null
-
-        if (validateForm() !== true) {
-            error = validateForm()
-            return
-        }
-
-        const register = await userStore.registerSteam(username, email, redirect)
+    function submit() {
+        userStore
+            .registerSteam(username, email)
+            .then(() => goto(redirect || '/'))
+            .catch(e => (errors = e))
     }
 </script>
 
@@ -85,8 +72,10 @@
                 <p>Upload blueprints and be notified of updates to your favorites!</p>
             </header>
             <div class="formWrapper">
-                {#if error}
-                    <Error message={error} />
+                {#if errors.length !== 0}
+                    {#each errors as error}
+                        <Error message={error} />
+                    {/each}
                 {/if}
                 <label style="display:none;">Register</label>
                 <input placeholder="Pick a username" name="username" bind:value={username} />

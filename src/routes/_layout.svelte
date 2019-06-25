@@ -2,9 +2,11 @@
     import { initSSRGQLClient } from '~/graphql/client'
     import { userStore } from '~/stores'
     export async function preload(page, session) {
-        const { user, authToken } = session
-        initSSRGQLClient(authToken)
+        const { user, ssrGQLClientData } = session
+        initSSRGQLClient(ssrGQLClientData)
         userStore.setState(user)
+
+        delete session.ssrGQLClientData
     }
 </script>
 

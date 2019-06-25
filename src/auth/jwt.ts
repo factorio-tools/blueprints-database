@@ -1,6 +1,7 @@
 import { JWT } from '@panva/jose'
 import env from '~/utils/env'
 import util from '~/utils/util'
+import { User } from '~/graphql/resolvers/user'
 
 interface JWTPayload {
     role: string

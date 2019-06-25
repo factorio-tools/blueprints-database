@@ -2,11 +2,12 @@ import { Response, RequestHandler } from 'express'
 import env from '~/utils/env'
 import util from '~/utils/util'
 import { issueNewToken, verify } from './jwt'
+import { User } from '~/graphql/resolvers/user'
 
 const getTokenStatus = (
     token: string,
     getUserFromDB: (id: string) => Promise<User | undefined>
-): Promise<undefined | { user: UserData; newToken?: string; expSession?: number }> =>
+): Promise<undefined | { user: PublicUserData; newToken?: string; expSession?: number }> =>
     new Promise(resolve => {
         try {
             const data = verify(token)

@@ -19,29 +19,20 @@
 </script>
 
 <script>
+    import { goto } from '@sapper/app'
     import Button from '~/components/Layout/Button/Button.svelte'
     export let redirect
 
     let form
     let username = ''
     let password = ''
-    let error = null
+    let errors = []
 
-    function validateForm() {
-        if (username == '' || password == '') return 'Please ensure all fields are completed'
-
-        return true
-    }
-
-    async function submit(event) {
-        error = null
-
-        if (validateForm() !== true) {
-            error = validateForm()
-            return
-        }
-
-        const login = await userStore.login(username, password, redirect)
+    function submit() {
+        userStore
+            .login(username, password)
+            .then(() => goto(redirect || '/'))
+            .catch(e => (errors = e))
     }
 </script>
 
@@ -80,8 +71,10 @@
                 <h2>LOGIN</h2>
             </header>
             <div class="formWrapper">
-                {#if error}
-                    <Error message={error} />
+                {#if errors.length !== 0}
+                    {#each errors as error}
+                        <Error message={error} />
+                    {/each}
                 {/if}
                 <label style="display:none;">Login</label>
                 <input placeholder="Username" name="username" bind:value={username} />

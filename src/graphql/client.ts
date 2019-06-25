@@ -1,21 +1,49 @@
-import ApolloClient from 'apollo-boost'
+import ApolloClient from 'apollo-client'
+import { InMemoryCache } from 'apollo-cache-inmemory'
+import { createHttpLink } from 'apollo-link-http'
+import { GraphQLSchema } from 'graphql'
 
 let client: ApolloClient<unknown>
 
 if (process.browser) {
-    client = new ApolloClient()
+    client = new ApolloClient({
+        cache: new InMemoryCache(),
+        link: createHttpLink({ uri: '/graphql', credentials: 'same-origin' }),
+        defaultOptions: {
+            query: {
+                errorPolicy: 'all'
+            },
+            mutate: {
+                errorPolicy: 'all'
+            },
+            watchQuery: {
+                errorPolicy: 'all'
+            }
+        }
+    })
 }
 
-const initSSRGQLClient = (authToken?: string) => {
+const initSSRGQLClient = async (ssrGQLClientData: { schema: GraphQLSchema; context: GQLContext }) => {
     if (!process.browser) {
+        const { SchemaLink } = await import('apollo-link-schema')
+
         client = new ApolloClient({
-            // node-fetch needs an absolute URI
-            uri: `http://localhost:${process.env.PORT}/graphql`,
-            // needed for SSR
-            fetch: require('node-fetch'),
-            // pass authToken trough sapper for SSR
-            headers: {
-                authorization: authToken ? `Bearer ${authToken}` : null
+            ssrMode: true,
+            cache: new InMemoryCache(),
+            link: new SchemaLink(ssrGQLClientData),
+            defaultOptions: {
+                query: {
+                    fetchPolicy: 'no-cache',
+                    errorPolicy: 'all'
+                },
+                mutate: {
+                    fetchPolicy: 'no-cache',
+                    errorPolicy: 'all'
+                },
+                watchQuery: {
+                    fetchPolicy: 'no-cache',
+                    errorPolicy: 'all'
+                }
             }
         })
     }

@@ -3,7 +3,7 @@ import { Application, Response, RequestHandler, Request } from 'express'
 import { JWE } from '@panva/jose'
 import { issueNewToken } from '~/auth/jwt'
 import { setAuthCookie } from '~/auth/middleware'
-import User from '~/models/user'
+import UserModel from '~/models/user'
 import env from '~/utils/env'
 
 interface Options {
@@ -20,7 +20,7 @@ const guard: RequestHandler = (req, res, next) => {
 }
 
 const cb = (steamID: string, res: Response, redirect: string = '/') => {
-    User.getUsingSteamID(steamID).then(user => {
+    UserModel.getUsingSteamID(steamID).then(user => {
         if (user) {
             const token = issueNewToken(user)
             setAuthCookie(res, token)
@@ -43,7 +43,7 @@ const clearSteamIDCookie = (res: Response) => {
 const getSteamID = (req: Request, res: Response): Promise<string> =>
     new Promise((resolve, reject) => {
         const cookie = req.cookies[env.STEAM_ID_COOKIE_NAME]
-        if (cookie)
+        if (cookie) {
             try {
                 const steamID = JWE.decrypt(cookie, env.STEAMID_COOKIE_KEY).toString()
                 resolve(steamID)
@@ -51,7 +51,9 @@ const getSteamID = (req: Request, res: Response): Promise<string> =>
                 clearSteamIDCookie(res)
                 reject(new Error('steamID not valid!'))
             }
-        else reject(new Error('no steamID cookie provided!'))
+        } else {
+            reject(new Error('no steamID cookie provided!'))
+        }
     })
 
 const initSteamAuth = (opts: Options) => {
@@ -68,7 +70,6 @@ const initSteamAuth = (opts: Options) => {
             if (err) return next(`Authentication failed: ${err}`)
 
             if (!authURL) {
-                console.log('TEST')
                 return next('Authentication failed.')
             }
 
@@ -85,8 +86,9 @@ const initSteamAuth = (opts: Options) => {
 
             if (!result || !result.authenticated) return next('Failed to authenticate user.')
 
-            if (!/^https?:\/\/steamcommunity\.com\/openid\/id\/\d+$/.test(result.claimedIdentifier))
+            if (!/^https?:\/\/steamcommunity\.com\/openid\/id\/\d+$/.test(result.claimedIdentifier)) {
                 return next('Claimed identity is not valid.')
+            }
 
             const steamID = result.claimedIdentifier.replace('https://steamcommunity.com/openid/id/', '')
 
