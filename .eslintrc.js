@@ -53,9 +53,6 @@ module.exports = {
         'import/exports-last': 'warn',
         'import/group-exports': 'warn',
 
-        // Possible Errors (https://eslint.org/docs/rules/#possible-errors)
-        'no-console': 'off',
-
         // Best Practices (https://eslint.org/docs/rules/#best-practices)
         curly: ['error', 'multi-line', 'consistent'],
         'dot-notation': ['error', { allowPattern: '^[a-z]+(_[a-z]+)+$' }],

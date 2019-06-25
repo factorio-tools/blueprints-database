@@ -25,8 +25,8 @@ const STEAM_ID_COOKIE_NAME = 'steamID'
 const AUTH_TOKEN_KEY_PATH = 'keys/AUTH_TOKEN_KEY'
 const STEAMID_COOKIE_KEY_PATH = 'keys/STEAMID_COOKIE_KEY'
 
-const AUTH_TOKEN_KEY = JWK.importKey(fs.readFileSync(AUTH_TOKEN_KEY_PATH)) as JWK.RSAKey
-const STEAMID_COOKIE_KEY = JWK.importKey(fs.readFileSync(STEAMID_COOKIE_KEY_PATH)) as JWK.OctKey
+const AUTH_TOKEN_KEY = JWK.asKey(fs.readFileSync(AUTH_TOKEN_KEY_PATH)) as JWK.RSAKey
+const STEAMID_COOKIE_KEY = JWK.asKey(fs.readFileSync(STEAMID_COOKIE_KEY_PATH)) as JWK.OctKey
 
 export default {
     NODE_ENV,
