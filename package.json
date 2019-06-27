@@ -26,6 +26,7 @@
         "openid": "^2.0.6",
         "reflect-metadata": "^0.1.13",
         "sirv": "^0.4.2",
+        "source-map": "0.6.1",
         "type-graphql": "Teoxoy/type-graphql#built-peer-class-validator"
     },
     "devDependencies": {

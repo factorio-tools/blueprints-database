@@ -1,6 +1,7 @@
 /* eslint-disable import/group-exports */
 import { ApolloError } from 'apollo-server-express'
 import { GraphQLError, GraphQLFormattedError } from 'graphql'
+import { sourcemapStacktrace } from '~/sourcemap-stacktrace'
 
 class AuthenticationError extends ApolloError {
     public readonly name = 'AuthenticationError'
@@ -35,6 +36,12 @@ const formatError = (error: GraphQLError): GraphQLFormattedError => {
     // Don't give the specific errors to the client
     if (error.message.startsWith('Database Error: ')) {
         return new InternalServerError()
+    }
+
+    if (error.extensions && error.extensions.exception && error.extensions.exception.stacktrace) {
+        const stacktrace = error.extensions.exception.stacktrace.join('\n')
+        const mappedStack = sourcemapStacktrace(stacktrace)
+        error.extensions.exception.stacktrace = mappedStack.split('\n')
     }
 
     return error
