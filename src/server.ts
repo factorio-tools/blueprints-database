@@ -1,3 +1,4 @@
+import 'source-map-support/register'
 import 'reflect-metadata'
 import sirv from 'sirv'
 import { default as express, Request, Response } from 'express'
