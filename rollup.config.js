@@ -14,15 +14,16 @@ const svelteConfig = require('./svelte.config')
 
 // Detect if we are building the app
 const build = process.argv.includes('build')
+const sourcemap = build ? true : 'inline'
 
-// https://github.com/sveltejs/sapper-template/blob/36d8b980351a084b256795dc1dc7f5b3c238b55b/rollup.config.js#L14
+// Ignore circular dependency warnings
 const onwarn = (warning, onwarn) =>
     (warning.code === 'CIRCULAR_DEPENDENCY' && /[/\\]@sapper[/\\]/.test(warning.message)) || onwarn(warning)
 
 export default {
     client: {
         input: config.client.input().replace(/\.js$/, '.ts'),
-        output: config.client.output(),
+        output: { ...config.client.output(), sourcemap },
         onwarn,
         plugins: [
             replace({
@@ -55,7 +56,7 @@ export default {
 
     server: {
         input: { server: config.server.input().server.replace(/\.js$/, '.ts') },
-        output: config.server.output(),
+        output: { ...config.server.output(), sourcemap },
         onwarn,
         plugins: [
             replace({
@@ -87,7 +88,7 @@ export default {
 
     serviceworker: {
         input: config.serviceworker.input().replace(/\.js$/, '.ts'),
-        output: config.serviceworker.output(),
+        output: { ...config.serviceworker.output(), sourcemap },
         onwarn,
         plugins: [
             resolve(),
