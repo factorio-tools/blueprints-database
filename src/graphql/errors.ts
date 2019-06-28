@@ -1,7 +1,7 @@
 /* eslint-disable import/group-exports */
 import { ApolloError } from 'apollo-server-express'
 import { GraphQLError, GraphQLFormattedError } from 'graphql'
-import { sourcemapStacktrace } from '~/sourcemap-stacktrace'
+import { sourcemapStacktrace } from 'sourcemap-stacktrace'
 
 class AuthenticationError extends ApolloError {
     public readonly name = 'AuthenticationError'
