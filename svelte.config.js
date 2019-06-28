@@ -1,7 +1,17 @@
-const sucrase = require('sucrase')
 const sass = require('node-sass')
-// const typescript = require('svelte-preprocess/src/transformers/typescript')
+const { preprocess, createEnv, readConfigFile } = require('@pyoner/svelte-ts-preprocess')
 // const stylus = require('stylus')
+
+const env = createEnv()
+const compilerOptions = readConfigFile(env)
+const opts = {
+    env,
+    compilerOptions: {
+        ...compilerOptions,
+        allowNonTsExtensions: true
+    },
+    hideErrors: true
+}
 
 // Needed for the svelte-vscode extension
 module.exports = {
@@ -15,6 +25,7 @@ module.exports = {
             return new Promise((resolve, reject) => {
                 sass.render(
                     {
+                        file: filename,
                         data: content,
                         includePaths: ['src', 'node_modules'],
                         sourceMap: true,
@@ -24,10 +35,9 @@ module.exports = {
                     },
                     (err, result) => {
                         if (err) return reject(err)
-
                         resolve({
                             code: result.css.toString(),
-                            map: result.map.toString(),
+                            map: JSON.parse(result.map.toString()),
                             dependencies: result.stats.includedFiles
                         })
                     }
@@ -49,29 +59,25 @@ module.exports = {
             //     })
             // })
         },
+        script: preprocess(opts).script
         // script: ({ content, attributes, filename }) => {
         //     if (attributes.lang !== 'typescript') return
 
-        //     return typescript({ content, filename, options: {} })
+        //     return new Promise((resolve, reject) => {
+        //         try {
+        //             const result = sucrase.transform(content, {
+        //                 transforms: ['typescript'],
+        //                 filePath: filename,
+        //                 sourceMapOptions: {
+        //                     compiledFilename: filename
+        //                 }
+        //             })
+
+        //             resolve({ code: result.code, map: result.sourceMap })
+        //         } catch (e) {
+        //             reject(e)
+        //         }
+        //     })
         // }
-        script: ({ content, attributes, filename }) => {
-            if (attributes.lang !== 'typescript') return
-
-            return new Promise((resolve, reject) => {
-                try {
-                    const result = sucrase.transform(content, {
-                        transforms: ['typescript'],
-                        filePath: filename,
-                        sourceMapOptions: {
-                            compiledFilename: filename
-                        }
-                    })
-
-                    resolve({ code: result.code, map: result.sourceMap })
-                } catch (e) {
-                    reject(e)
-                }
-            })
-        }
     }
 }
