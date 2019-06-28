@@ -2,7 +2,6 @@ import 'source-map-support/register'
 import 'reflect-metadata'
 import sirv from 'sirv'
 import { default as express, Request, Response } from 'express'
-import compression from 'compression'
 import * as sapper from '@sapper/server'
 import cookieParser from 'cookie-parser'
 import { initGQLServer } from './graphql/server'
@@ -29,7 +28,6 @@ initDBClient().then(() => {
     initGQLServer(app)
         .then(ssrGQLClientData => {
             app.use(
-                compression({ threshold: 0 }),
                 sirv('static', { dev: env.IS_DEV_ENV }),
                 sapper.middleware({
                     session: (req, res) => ({
