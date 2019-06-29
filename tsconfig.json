@@ -30,6 +30,6 @@
         "paths": {
             "~/*": ["./src/*"]
         },
-        "types": ["@pyoner/svelte-types"]
+        "types": ["@pyoner/svelte-types", "@sapper", "openid"]
     }
 }
