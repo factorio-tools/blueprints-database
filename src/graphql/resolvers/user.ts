@@ -81,7 +81,7 @@ function BlockIfProvidedUserDataIsInUse() {
             users => {
                 const errors = users
                     .map((user, i) => (user ? checkData[i].error : undefined))
-                    .filter(errMsg => !!errMsg) as string[]
+                    .filter(Boolean) as string[]
 
                 if (errors.length === 0) {
                     return next()
