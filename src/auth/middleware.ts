@@ -1,68 +1,8 @@
 import { Response, RequestHandler } from 'express'
+import { issueNewToken, verifyToken } from './jwt'
 import env from '~/utils/env'
 import util from '~/utils/util'
-import { issueNewToken, verify } from './jwt'
 import { User } from '~/graphql/resolvers/user'
-
-const getTokenStatus = (
-    token: string,
-    getUserFromDB: (id: string) => Promise<User | undefined>
-): Promise<undefined | { user: PublicUserData; newToken?: string; expSession?: number }> =>
-    new Promise(resolve => {
-        try {
-            const data = verify(token)
-            const now = util.currentUnixTime()
-
-            if (now > data.expSession) {
-                // session expired
-                resolve(undefined)
-            }
-
-            if (now > data.exp) {
-                // get user from db
-                resolve(
-                    getUserFromDB(data.sub).then(user => {
-                        if (user) {
-                            if (data.epoch === user.jwtEpoch) {
-                                // token expired
-                                return {
-                                    user: {
-                                        id: user.id,
-                                        role: user.role,
-                                        extraPerm: user.extraPerm,
-                                        username: user.username,
-                                        displayname: user.displayname
-                                    },
-                                    newToken: issueNewToken(user, data.expSession),
-                                    expSession: data.expSession
-                                }
-                            } else {
-                                // session revoked
-                                return undefined
-                            }
-                        } else {
-                            // user not found in db
-                            return undefined
-                        }
-                    })
-                )
-            }
-
-            // valid token
-            resolve({
-                user: {
-                    id: data.sub,
-                    role: data.role,
-                    extraPerm: data.perm,
-                    username: data.username,
-                    displayname: data.displayname
-                }
-            })
-        } catch (err) {
-            // invalid token
-            resolve(undefined)
-        }
-    })
 
 const setAuthCookie = (res: Response, token: string, expires = util.currentUnixTime() + env.SESSION_LENGTH) => {
     res.cookie(env.AUTH_TOKEN_NAME, token, {
@@ -91,22 +31,50 @@ const attachUserToContext = (getUserFromDB: (id: string) => Promise<User | undef
         req.cookies[env.AUTH_TOKEN_NAME] ||
         (req.headers.authorization ? req.headers.authorization.replace('Bearer ', '') : undefined)
 
-    if (token) {
-        getTokenStatus(token, getUserFromDB).then(result => {
-            if (result) {
-                req.user = result.user
+    verifyToken(token)
+        .then(data => {
+            const now = util.currentUnixTime()
 
-                if (result.newToken && result.expSession) {
-                    setAuthCookie(res, result.newToken, result.expSession)
-                }
-            } else {
-                clearAuthCookie(res)
+            if (now > data.expSession) {
+                throw new Error('session expired')
             }
+
+            if (now > data.exp) {
+                return getUserFromDB(data.sub).then(user => {
+                    if (!user) throw new Error('user not found in db')
+                    if (data.epoch !== user.jwtEpoch) throw new Error('session revoked')
+
+                    // token expired, renew
+                    const newToken = issueNewToken(user, data.expSession)
+                    setAuthCookie(res, newToken, data.expSession)
+
+                    return {
+                        id: user.id,
+                        role: user.role,
+                        extraPerm: user.extraPerm,
+                        username: user.username,
+                        displayname: user.displayname
+                    }
+                })
+            }
+
+            return {
+                id: data.sub,
+                role: data.role,
+                extraPerm: data.perm,
+                username: data.username,
+                displayname: data.displayname
+            }
+        })
+        .then(user => {
+            req.user = user
+        })
+        .catch(() => {
+            if (token) clearAuthCookie(res)
+        })
+        .finally(() => {
             next()
         })
-    } else {
-        next()
-    }
 }
 
 export { attachUserToContext, setAuthCookie, clearAuthCookie }

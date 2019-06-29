@@ -41,10 +41,21 @@ const issueNewToken = (user: User, expSession?: number) => {
     )
 }
 
-const verify = (token: string) =>
-    JWT.verify(token, env.AUTH_TOKEN_KEY, {
-        audience: 'https://blueprints.factorio.tools',
-        ignoreExp: true
-    }) as JWTPayload
+const verifyToken = (token: string): Promise<JWTPayload> =>
+    new Promise((resolve, reject) => {
+        if (token) {
+            try {
+                const data = JWT.verify(token, env.AUTH_TOKEN_KEY, {
+                    audience: 'https://blueprints.factorio.tools',
+                    ignoreExp: true
+                }) as JWTPayload
+                resolve(data)
+            } catch {
+                reject('invalid token')
+            }
+        } else {
+            reject('no token provided')
+        }
+    })
 
-export { issueNewToken, verify }
+export { issueNewToken, verifyToken }
