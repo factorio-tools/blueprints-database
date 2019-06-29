@@ -2,9 +2,13 @@ import { Response, RequestHandler } from 'express'
 import { issueNewToken, verifyToken } from './jwt'
 import env from '~/utils/env'
 import util from '~/utils/util'
-import { User } from '~/graphql/resolvers/user'
+import UserModel from '~/models/user'
 
-const setAuthCookie = (res: Response, token: string, expires = util.currentUnixTime() + env.SESSION_LENGTH) => {
+const setAuthCookie = (
+    res: Response,
+    token: string,
+    expires = util.currentUnixTime() + env.SESSION_LENGTH
+) => {
     res.cookie(env.AUTH_TOKEN_NAME, token, {
         domain: env.MAIN_DOMAIN,
         httpOnly: true,
@@ -22,7 +26,7 @@ const clearAuthCookie = (res: Response) => {
     })
 }
 
-const attachUserToContext = (getUserFromDB: (id: string) => Promise<User | undefined>): RequestHandler => (
+const attachUserToContext = (getUserFromDB: typeof UserModel.get): RequestHandler => (
     req,
     res,
     next

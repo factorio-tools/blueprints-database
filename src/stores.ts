@@ -1,11 +1,20 @@
 import * as sapper from '@sapper/app'
-import { query, mutate } from 'svelte-apollo'
+import { mutate } from 'svelte-apollo'
 import { writable } from 'svelte/store'
 import { validate } from 'class-validator'
 import { GraphQLError } from 'graphql'
 import { client } from './graphql/client'
-import { USER_LOGIN, USER_LOGOUT, USER_REGISTER_WITH_STEAM, USER_REGISTER } from './graphql/queries.gql'
-import { LoginInput, RegisterInput, RegisterWithSteamInput } from './graphql/resolvers/userInputTypes'
+import {
+    USER_LOGIN,
+    USER_LOGOUT,
+    USER_REGISTER_WITH_STEAM,
+    USER_REGISTER
+} from './graphql/queries.gql'
+import {
+    LoginInput,
+    RegisterInput,
+    RegisterWithSteamInput
+} from './graphql/resolvers/userInputTypes'
 
 interface CreateBlueprintPreviewProps {
     title: string
@@ -28,7 +37,8 @@ function createBlueprintPreviewStore() {
     return {
         subscribe,
         defaultProps,
-        setState: (newState: CreateBlueprintPreviewProps) => update(state => ({ ...state, ...newState })),
+        setState: (newState: CreateBlueprintPreviewProps) =>
+            update(state => ({ ...state, ...newState })),
         reset: () => set({ ...defaultProps })
     }
 }
@@ -45,14 +55,22 @@ function createUserStore() {
 
     const parseGQLErrors = (errors: readonly GraphQLError[]): string[] =>
         errors.flatMap(e => {
-            if (e.extensions && e.extensions.code === 'ARRAY_OF_ERRORS') return e.message.split('\n')
-            else return e.message
+            if (e.extensions && e.extensions.code === 'ARRAY_OF_ERRORS') {
+                return e.message.split('\n')
+            } else {
+                return e.message
+            }
         })
 
     // eslint-disable-next-line @typescript-eslint/ban-types
-    const getInputErrors = <T extends Object>(classType: new () => T, inputVars: Record<string, unknown>) => {
+    const getInputErrors = <T extends Object>(
+        classType: new () => T,
+        inputVars: Record<string, unknown>
+    ) => {
         const input = Object.assign(new classType(), inputVars)
-        return validate(input).then(inputErrors => inputErrors.flatMap(e => Object.values(e.constraints)))
+        return validate(input).then(inputErrors =>
+            inputErrors.flatMap(e => Object.values(e.constraints))
+        )
     }
 
     return {
@@ -109,7 +127,12 @@ function createUserStore() {
             })
         },
 
-        register: async (username: string, password: string, confirmPassword: string, email: string) => {
+        register: async (
+            username: string,
+            password: string,
+            confirmPassword: string,
+            email: string
+        ) => {
             const inputVars = { username, password, confirmPassword, email }
 
             const inputErrors = await getInputErrors(RegisterInput, inputVars)

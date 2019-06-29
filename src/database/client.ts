@@ -4,8 +4,8 @@ import { InMemoryCache } from 'apollo-cache-inmemory'
 import { SchemaLink } from 'apollo-link-schema'
 import { getLogger } from 'log4js'
 import { DocumentNode } from 'graphql'
-import env from '~/utils/env'
 import dbSchema from './schema.graphqls'
+import env from '~/utils/env'
 
 class Log4jsLoggerProvider implements LoggerProvider {
     public readonly level: string

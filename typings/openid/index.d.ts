@@ -2,7 +2,13 @@ declare module 'openid' {
     import { IncomingMessage } from 'http'
 
     class RelyingParty {
-        public constructor(returnUrl: string, realm: string, stateless: boolean, strict: boolean, extensions: [])
+        public constructor(
+            returnUrl: string,
+            realm: string,
+            stateless: boolean,
+            strict: boolean,
+            extensions: []
+        )
 
         public authenticate(
             identifier: string,

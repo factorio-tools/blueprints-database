@@ -7,17 +7,15 @@ import {
     Mutation,
     Ctx,
     Arg,
-    Args,
     Authorized,
-    InputType,
     createMethodDecorator
 } from 'type-graphql'
+import { ArrayOfErrors } from '../errors'
+import { RegisterInput, RegisterWithSteamInput, LoginInput } from './userInputTypes'
 import UserModel from '~/models/user'
 import { setAuthCookie, clearAuthCookie } from '~/auth/middleware'
 import { issueNewToken } from '~/auth/jwt'
 import { getSteamID, clearSteamIDCookie } from '~/auth/steam'
-import { ArrayOfErrors } from '../errors'
-import { RegisterInput, RegisterWithSteamInput, LoginInput } from './userInputTypes'
 
 @ObjectType()
 class User {
@@ -79,17 +77,19 @@ function BlockIfProvidedUserDataIsInUse() {
             }
         ]
 
-        return Promise.all(checkData.map(opts => (opts.var ? opts.fn(opts.var) : undefined))).then(users => {
-            const errors = users
-                .map((user, i) => (user ? checkData[i].error : undefined))
-                .filter(errMsg => !!errMsg) as string[]
+        return Promise.all(checkData.map(opts => (opts.var ? opts.fn(opts.var) : undefined))).then(
+            users => {
+                const errors = users
+                    .map((user, i) => (user ? checkData[i].error : undefined))
+                    .filter(errMsg => !!errMsg) as string[]
 
-            if (errors.length === 0) {
-                return next()
-            } else {
-                throw new ArrayOfErrors(errors)
+                if (errors.length === 0) {
+                    return next()
+                } else {
+                    throw new ArrayOfErrors(errors)
+                }
             }
-        })
+        )
     })
 }
 

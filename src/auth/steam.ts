@@ -80,17 +80,28 @@ const initSteamAuth = (opts: Options) => {
     opts.app.get(opts.tempPath, guard, (req, res, next) => {
         const redirect: string | undefined = req.query.redirect
 
-        const relyingParty = new RelyingParty(`${opts.baseURL}${opts.tempPath}`, opts.baseURL, true, true, [])
+        const relyingParty = new RelyingParty(
+            `${opts.baseURL}${opts.tempPath}`,
+            opts.baseURL,
+            true,
+            true,
+            []
+        )
         relyingParty.verifyAssertion(req, (err, result) => {
             if (err) return next(err.message)
 
             if (!result || !result.authenticated) return next('Failed to authenticate user.')
 
-            if (!/^https?:\/\/steamcommunity\.com\/openid\/id\/\d+$/.test(result.claimedIdentifier)) {
+            if (
+                !/^https?:\/\/steamcommunity\.com\/openid\/id\/\d+$/.test(result.claimedIdentifier)
+            ) {
                 return next('Claimed identity is not valid.')
             }
 
-            const steamID = result.claimedIdentifier.replace('https://steamcommunity.com/openid/id/', '')
+            const steamID = result.claimedIdentifier.replace(
+                'https://steamcommunity.com/openid/id/',
+                ''
+            )
 
             cb(steamID, res, redirect)
         })

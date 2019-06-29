@@ -35,7 +35,10 @@ initDBClient().then(() => {
                         devEnv: env.IS_DEV_ENV,
                         ssrGQLClientData: {
                             schema: ssrGQLClientData.schema,
-                            context: ssrGQLClientData.context({ req: req as Request, res: res as Response })
+                            context: ssrGQLClientData.context({
+                                req: req as Request,
+                                res: res as Response
+                            })
                         }
                     })
                 })
