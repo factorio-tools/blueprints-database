@@ -1,3 +1,7 @@
+<script>
+  import Button from '~/components/Layout/Button/Button.svelte'
+</script>
+
 <style lang="scss">
     footer {
         width: 100%;
