@@ -13,13 +13,14 @@
     footer div.sitemap a {
         text-transform: uppercase;
         border: 0;
-        margin: 10px 18px 10px 18px;
+        margin: 10px 24px 10px 18px;
         display: inline-block;
-        font-size: 19px;
+        font-size: 22px;
         font-weight: 400;
         line-height: 19px;
         height: 43px;
         color: #ffffff;
+        font-family: 'Teko', sans-serif;
     }
     footer div.legal {
          color: #ccc;
@@ -28,6 +29,11 @@
 </style>
 
 <footer>
+  <div class="logo_container">
+    <a href="/">
+      <img src="/factorio_tools_logo.svg" alt="Factorio Tools" />
+    </a>
+  </div>
     <div class="sitemap">
       <a href="/">Home</a>
       <a href="/about">About</a>
