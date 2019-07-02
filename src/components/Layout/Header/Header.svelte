@@ -39,6 +39,9 @@
     nav > :global(button) {
         margin-left: 15px;
     }
+    nav button {
+        text-transform: uppercase;
+    }
 </style>
 
 <header>
@@ -51,7 +54,7 @@
         </a>
     </div>
     <nav>
-        <Button text="ADD BLUEPRINT" href="/blueprint/add" icon="plus" color="yellow" />
+        <Button text="Add Blueprint" href="/blueprint/add" icon="plus" color="yellow" />
         <Button
             text={$userStore.displayname || 'Login'}
             href={!$userStore.displayname && '/user/login'}
