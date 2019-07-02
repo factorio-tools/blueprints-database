@@ -26,20 +26,9 @@
          color: #ccc;
          font-size: 80%;
     }
-    .logo_container img {
-         width: 180px;
-    }
-    .logo_container {
-         margin-bottom: 30px;
-    }
 </style>
 
 <footer>
-  <div class="logo_container">
-    <a href="/">
-      <img src="/factorio_tools_logo.svg" alt="Factorio Tools" />
-    </a>
-  </div>
     <div class="sitemap">
       <a href="/">Home</a>
       <a href="/about">About</a>
