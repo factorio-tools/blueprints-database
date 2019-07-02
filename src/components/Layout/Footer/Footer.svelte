@@ -26,6 +26,12 @@
          color: #ccc;
          font-size: 80%;
     }
+    .logo_container img {
+         width: 180px;
+    }
+    .logo_container {
+         margin-bottom: 30px;
+    }
 </style>
 
 <footer>
