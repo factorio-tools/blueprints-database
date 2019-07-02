@@ -10,8 +10,16 @@
         margin: 0 auto;
         text-align: center;
     }
-    footer div button {
+    footer div.sitemap a {
         text-transform: uppercase;
+        border: 0;
+        margin: 10px 18px 10px 18px;
+        display: inline-block;
+        font-size: 19px;
+        font-weight: 400;
+        line-height: 19px;
+        height: 43px;
+        color: #ffffff;
     }
     footer div.legal {
          color: #ccc;
@@ -20,11 +28,11 @@
 </style>
 
 <footer>
-    <div>
-      <Button text="Home" href="/" />
-      <Button text="About" href="/about" />
-      <Button text="Add Blueprint" href="/blueprint/add" />
-      <Button text="Contact Us" href="/contact" />
+    <div class="sitemap">
+      <a href="/" />Home</a>
+      <a href="/about" />About</a>
+      <a href="/blueprint/add" />Add Blueprint</a>
+      <a href="/contact" />Contact Us</a>
     </div>
     <div class="legal">
         &copy; Factorio.tools 2019

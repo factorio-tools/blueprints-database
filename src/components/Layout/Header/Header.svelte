@@ -38,8 +38,6 @@
     }
     nav > :global(button) {
         margin-left: 15px;
-    }
-    nav button {
         text-transform: uppercase;
     }
 </style>
