@@ -16,7 +16,7 @@
         "bcrypt": "^3.0.6",
         "class-validator": "HorusGoul/class-validator#latest",
         "cookie-parser": "^1.4.4",
-        "cruddl": "^0.8.1",
+        "cruddl": "^1.0.1",
         "env-cmd": "^9.0.3",
         "express": "^4.17.1",
         "graphql": "^14.4.2",
