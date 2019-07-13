@@ -8,7 +8,7 @@
         "gen:key-steam": "node our-cli gen-key oct keys/STEAMID_COOKIE_KEY"
     },
     "dependencies": {
-        "@panva/jose": "^1.3.0",
+        "@panva/jose": "^1.4.0",
         "apollo-cache-inmemory": "^1.6.2",
         "apollo-client": "^2.6.3",
         "apollo-link-schema": "^1.2.3",
