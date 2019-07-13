@@ -42,7 +42,7 @@
         "@typescript-eslint/parser": "^1.11.0",
         "apollo-link-http": "^1.5.15",
         "eslint": "^6.0.1",
-        "eslint-config-prettier": "^5.1.0",
+        "eslint-config-prettier": "^6.0.0",
         "eslint-import-resolver-alias": "^1.1.2",
         "eslint-plugin-import": "^2.18.0",
         "eslint-plugin-prettier": "^3.1.0",
