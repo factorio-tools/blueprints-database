@@ -3,6 +3,7 @@ import { IsEmail } from 'class-validator/decorator/string/IsEmail'
 import { Length } from 'class-validator/decorator/string/Length'
 import { IsNotEmpty } from 'class-validator/decorator/common/IsNotEmpty'
 import { ValidateIf } from 'class-validator/decorator/system/ValidateIf'
+import { Matches } from 'class-validator/decorator/string/Matches'
 import { User } from './user'
 import { EqualsField } from './validationDecorators'
 
@@ -10,6 +11,10 @@ import { EqualsField } from './validationDecorators'
 class RegisterInput implements Partial<User> {
     @Field()
     @Length(2, 25)
+    @Matches(/^[a-zA-Z0-9._-]+$/, {
+        message:
+            'username must contain only letters, numbers and the following symbols: . (dot), _ (underscore) or - (dash)'
+    })
     public username!: string
 
     @Field()
@@ -29,6 +34,10 @@ class RegisterInput implements Partial<User> {
 class RegisterWithSteamInput implements Partial<User> {
     @Field()
     @Length(2, 25)
+    @Matches(/^[a-zA-Z0-9._-]+$/, {
+        message:
+            'username must contain only letters, numbers and the following symbols: . (dot), _ (underscore) or - (dash)'
+    })
     public username!: string
 
     @Field({ nullable: true })
