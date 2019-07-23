@@ -47,7 +47,7 @@
         "eslint": "^6.1.0",
         "eslint-config-prettier": "^6.0.0",
         "eslint-import-resolver-alias": "^1.1.2",
-        "eslint-plugin-import": "^2.18.0",
+        "eslint-plugin-import": "^2.18.2",
         "eslint-plugin-prettier": "^3.1.0",
         "eslint-plugin-svelte3": "^2.7.2",
         "fs-extra": "^8.1.0",
