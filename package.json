@@ -11,7 +11,7 @@
         "node": "^12.4.0"
     },
     "dependencies": {
-        "@panva/jose": "^1.4.1",
+        "@panva/jose": "^1.6.0",
         "apollo-cache-inmemory": "^1.6.2",
         "apollo-client": "^2.6.3",
         "apollo-link-schema": "^1.2.3",
