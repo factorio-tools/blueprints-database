@@ -18,7 +18,8 @@ const sourcemap = build ? true : 'inline'
 
 // Ignore circular dependency warnings
 const onwarn = (warning, onwarn) =>
-    (warning.code === 'CIRCULAR_DEPENDENCY' && /[/\\]@sapper[/\\]/.test(warning.message)) || onwarn(warning)
+    (warning.code === 'CIRCULAR_DEPENDENCY' && /[/\\]@sapper[/\\]/.test(warning.message)) ||
+    onwarn(warning)
 
 export default {
     client: {
@@ -37,8 +38,16 @@ export default {
             }),
             alias({
                 resolve: ['.js', '.ts', '.gql', '.svelte'],
-                '~': path.join(__dirname, './src'),
-                'type-graphql': path.join(__dirname, './node_modules/type-graphql/dist/browser-shim')
+                entries: [
+                    { find: '~', replacement: path.join(__dirname, './src') },
+                    {
+                        find: 'type-graphql',
+                        replacement: path.join(
+                            __dirname,
+                            './node_modules/type-graphql/dist/browser-shim'
+                        )
+                    }
+                ]
             }),
             resolve({ extensions: ['.mjs', '.js', '.ts', '.json'] }),
             commonjs(),
@@ -69,7 +78,7 @@ export default {
             }),
             alias({
                 resolve: ['.js', '.ts', '.gql', '.svelte'],
-                '~': path.join(__dirname, './src')
+                entries: [{ find: '~', replacement: path.join(__dirname, './src') }]
             }),
             resolve({ extensions: ['.js', '.ts', '.mjs', '.json'] }),
             commonjs(),
