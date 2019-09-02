@@ -22,7 +22,7 @@
         "cruddl": "^1.0.2",
         "env-cmd": "^9.0.3",
         "express": "^4.17.1",
-        "graphql": "^14.5.3",
+        "graphql": "^14.5.4",
         "graphql-tools": "^4.0.5",
         "log4js": "^5.1.0",
         "openid": "^2.0.6",
