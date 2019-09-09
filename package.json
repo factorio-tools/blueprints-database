@@ -34,7 +34,7 @@
     },
     "devDependencies": {
         "@kocal/rollup-plugin-graphql": "^1.0.0",
-        "@pyoner/svelte-ts-preprocess": "^1.2.0",
+        "@pyoner/svelte-ts-preprocess": "^1.2.1",
         "@pyoner/svelte-types": "^3.4.4-2",
         "@types/bcrypt": "^3.0.0",
         "@types/cookie-parser": "^1.4.2",
