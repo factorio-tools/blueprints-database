@@ -65,7 +65,7 @@
         "rollup-plugin-typescript2": "^0.24.0",
         "sade": "^1.6.1",
         "sapper": "^0.27.8",
-        "svelte": "^3.9.1",
+        "svelte": "^3.12.0",
         "svelte-apollo": "^0.3.0",
         "svelte-transitions": "^1.2.0",
         "typescript": "^3.6.2"
