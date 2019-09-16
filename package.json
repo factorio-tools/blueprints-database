@@ -68,6 +68,6 @@
         "svelte": "^3.12.0",
         "svelte-apollo": "^0.3.0",
         "svelte-transitions": "^1.2.0",
-        "typescript": "^3.6.2"
+        "typescript": "^3.6.3"
     }
 }
