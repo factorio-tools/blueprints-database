@@ -24,7 +24,7 @@
         "express": "^4.17.1",
         "graphql": "^14.5.8",
         "graphql-tools": "^4.0.5",
-        "log4js": "^5.1.0",
+        "log4js": "^5.2.0",
         "openid": "^2.0.6",
         "reflect-metadata": "^0.1.13",
         "sirv": "^0.4.2",
