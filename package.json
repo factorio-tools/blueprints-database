@@ -28,7 +28,7 @@
         "openid": "^2.0.6",
         "reflect-metadata": "^0.1.13",
         "sirv": "^0.4.2",
-        "source-map-support": "^0.5.13",
+        "source-map-support": "^0.5.16",
         "sourcemap-stacktrace": "^1.0.2",
         "type-graphql": "Teoxoy/type-graphql#built-peer-class-validator"
     },
