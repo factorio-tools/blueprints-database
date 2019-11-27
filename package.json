@@ -16,7 +16,7 @@
         "apollo-client": "^2.6.4",
         "apollo-link-schema": "^1.2.4",
         "apollo-server-express": "^2.9.7",
-        "bcrypt": "^3.0.6",
+        "bcrypt": "^3.0.7",
         "class-validator": "HorusGoul/class-validator#latest",
         "cookie-parser": "^1.4.4",
         "cruddl": "^1.0.4",
