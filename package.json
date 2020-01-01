@@ -15,7 +15,7 @@
         "apollo-cache-inmemory": "^1.6.5",
         "apollo-client": "^2.6.8",
         "apollo-link-schema": "^1.2.4",
-        "apollo-server-express": "^2.9.13",
+        "apollo-server-express": "^2.9.15",
         "bcrypt": "^3.0.7",
         "class-validator": "HorusGoul/class-validator#latest",
         "cookie-parser": "^1.4.4",
